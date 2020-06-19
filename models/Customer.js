@@ -13,9 +13,11 @@ var CustomerSchema = new mongoose.Schema({
 });
 
 CustomerSchema.pre('save', function(next) {
+    console.log("save")
     var user = this;
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password') ){
+        console.log("Not modified")
         next();
     }else{
         bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -23,15 +25,16 @@ CustomerSchema.pre('save', function(next) {
                 next(err);
             }else{
                 // hash the password using our new salt
-            bcrypt.hash(user.password, salt,null,function(err, hash) {
-                if (err){
-                    next(err);
-                }else{
-                    // override the cleartext password with the hashed one
-                    user.password = hash;
-                    next();
-                }
-            });
+                bcrypt.hash(user.password, salt,null,function(err, hash) {
+                    if (err){
+                        next(err);
+                    }else{
+                        // override the cleartext password with the hashed one
+                        user.password = hash;
+                        console.log("Done");
+                        next();
+                    }
+                });
             }
         });
     }

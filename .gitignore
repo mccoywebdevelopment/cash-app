@@ -1,4 +1,4 @@
 # ignore all node_module files
 node_modules/
 
-/config/secret.js
+secret.js
