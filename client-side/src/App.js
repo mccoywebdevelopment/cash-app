@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  
+
+  render() {
+    const NavBar = () => {
+      return (
+        <nav className="navbar navbar-expand-md bg-dark navbar-dark">
+        <a className="navbar-brand" href="#">Cash App</a>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <a className="nav-link" href="/shop">Shop</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/cart">Cart</a>
+            </li>
+            <li className="nav-item pull-right">
+              <a className="nav-link" href="/profile">Profile</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      );
+    };
+    return (
+      <>
+        {NavBar()}
+        <h1>Test</h1>
+      </>
+    )
+  }
 }
 
 export default App;
