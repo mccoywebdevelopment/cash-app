@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const db = require("./config/secret").mongoURI;
 const port = process.env.PORT || 4000;
+const passport = require("passport");
 
 app.use(
   bodyParser.urlencoded({
@@ -14,6 +15,10 @@ app.use(bodyParser.json());
 mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
+
+// Passport middleware
+app.use(passport.initialize());
+require("./config/passport")(passport);
 
 app.use('/customer',require('./routes/Customer'));
 
