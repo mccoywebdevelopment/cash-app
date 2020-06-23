@@ -6,24 +6,48 @@ export default class ProfileView extends React.Component{
     }
     _renderProfile = () =>{
         return(
-            <div className="col-lg-10 offset-lg-1 card" style={{minHeight:'30em'}}>
-                {/* <div className="card">
-                    <img className="card-img-top" src="https://images.unsplash.com/photo-1537815749002-de6a533c64db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="Card image cap"/>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title</h5>
-                        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div> */}
-                <div className="row">
-                    <div className="col-lg-8">
-                        <h1>Christopher McCoy</h1>
-                        <h5>cmmccoy1996@gmail.com</h5>
-                    </div>
-                    <div className="col-lg-4">
-                        <p className="float-right">Date Created:12/21/2019</p>
+                <div class="container" style={{marginTop:'3em'}}>
+                    <div class="row">
+                        <div class="col-md-4" style={{flex:'1'}}>
+                            <div class="card p-card" style={{minHeight:'100%'}}>
+                                <div class="col-lg-12 text-center">
+                                    <img src="https://images.unsplash.com/photo-1537815749002-de6a533c64db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                                        class="img-fluid" style={{width:'150px',borderRadius:'50%'}}/>
+                                </div>
+                                
+                                <div class="col-lg-12" style={{marginTop:'30px'}}>
+                                    <h5 style={{fontWeight:'bold'}}>My Profile:</h5>
+                                </div>
+                                <div class="row" style={{marginTop:'5em'}}>
+                                    <div class="col-lg-6">
+                                        <h5 style={{fontWeight:'500'}}>Name:</h5>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p style={{float:'right'}}>Chris McCoy</p>
+                                    </div>
+                                    <div class="col-lg-7" style={{marginTop:'30px'}}>
+                                        <h5 style={{fontWeight:'500'}}>Date Created:</h5>
+                                    </div>
+                                    <div class="col-lg-5" style={{marginTop:'30px'}}>
+                                        <p style={{float:'right'}}>12/17/2020</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 stackem">
+                            <div class="card p-card" style={{marginBottom:'2em'}}>
+                                <div class="col-lg-12">
+                                    <h5 style={{fontWeight:'bold'}}>My Orders:</h5>
+                                </div>
+                            </div>
+                            <div class="card p-card">
+                                <div class="col-lg-12">
+                                    <h5 style={{fontWeight:'bold'}}>Billing Info:</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
         )
     }
     render(){

@@ -15,10 +15,29 @@ html, body, #app, #app>div {
     height: inherit;
 } */
 body{
-    background-color:#ffffff;
+    background-color:#E9E9E9;
     font-family: 'Open Sans', sans-serif!important;
+    font-weight: 500;
 }
 .my-nav{
-    background-color: #FF8500!important;
+    background-color: #F47F07!important;
     color:#ffffff;
+    font-weight: 600;
+}
+.card-title{
+    font-weight: bold;
+}
+.btn-primary{
+    color:#ffffff;
+    background-color: #51B8C8;
+}
+.card{
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,.25)!important;
+}
+.stackem{
+    width: 100%;
+}
+.p-card{
+    min-height: 15em;
+    padding: 2em;
 }

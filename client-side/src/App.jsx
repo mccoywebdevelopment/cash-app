@@ -75,7 +75,7 @@ class App extends React.Component {
         <div className="content">
           {!this.state.isLoaded && this.state.selected =='shop'?
           <div className="h-100 d-flex justify-content-center align-items-center" style={{marginTop:'10em'}}>
-            <PulseLoader size={100} color="#3AA6D0"/>
+            <PulseLoader size={100} color="#51B8C8"/>
           </div>
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
