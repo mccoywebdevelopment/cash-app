@@ -9,6 +9,7 @@ var CustomerSchema = new mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, min: 8, required: true, select: false },
   dateCreated: { type: Date, default: new Date() },
+  name:{type:String, required: true},
   token: { type: String, default: crypto.randomBytes(256), select: false },
   orders: [
     {

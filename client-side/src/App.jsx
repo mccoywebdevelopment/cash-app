@@ -2,6 +2,8 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "./App.css";
+import {API_BASE_URL} from "./config/variables";
+import PulseLoader from "react-spinners/PulseLoader";
 
 import CartView from "./views/CartView";
 import ProfileView from "./views/ProfileView";
@@ -11,7 +13,11 @@ import HomeView from "./views/HomeView";
 class App extends React.Component {
   
   state = {
-    selected:"home"
+    selected:"home",
+    user:true,
+    items:[],
+    subscribedItems:[],
+    isLoaded:false
   }
   _toggleLink = (name) =>{
     let newState = this.state;
@@ -19,11 +25,30 @@ class App extends React.Component {
     this.setState(newState);
     console.log(this.state);
   }
+  _fetchItems=async()=>{
+    await fetch(API_BASE_URL+"/item",{
+      method:"POST"
+    }).then(response => { return response.json();})
+    .then(responseData => {
+      let newState = this.state;
+      newState.items = responseData.items;
+      newState.isLoaded = true;
+      this.setState(newState);
+    });
+  }
+  _addItemToCart=(item)=>{
+    let newState = this.state;
+    newState.subscribedItems.push(item);
+    this.setState(newState);
+  }
+  componentDidMount = () =>{
+    this._fetchItems();
+  }
 
   render() {
     const NavBar = () => {
       return (
-        <nav className="navbar navbar-expand-md bg-dark navbar-dark">
+        <nav className="navbar navbar-expand-md bg-dark my-nav fixed-top">
         <a className={"navbar-brand"} onClick={(e)=>{this._toggleLink('home')}}>Cash App</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
           <span className="navbar-toggler-icon"></span>
@@ -34,7 +59,7 @@ class App extends React.Component {
               <a className="nav-link">Shop</a>
             </li>
             <li onClick={(e)=>{this._toggleLink('cart')}} className={"nav-item "+ (this.state.selected == 'cart' ? 'active' : '')}>
-              <a className="nav-link">Cart</a>
+            <a className="nav-link">Cart<sup>{this.state.subscribedItems.length}</sup></a>
             </li>
             <li onClick={(e)=>{this._toggleLink('profile')}} className={"nav-item "+ (this.state.selected == 'profile' ? 'active' : '')}>
               <a className="nav-link">Profile</a>
@@ -48,14 +73,18 @@ class App extends React.Component {
       <>
         {NavBar()}
         <div className="content">
-          {this.state.selected=='shop'?
-            <ShopView/>
+          {!this.state.isLoaded && this.state.selected =='shop'?
+          <div className="h-100 d-flex justify-content-center align-items-center" style={{marginTop:'10em'}}>
+            <PulseLoader size={100} color="#3AA6D0"/>
+          </div>
+          :this.state.selected=='shop'?
+            <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
           :this.state.selected=='cart'?
-            <CartView/>
+            <CartView items={this.state.subscribedItems}/>
             :this.state.selected=='home'?
-            <HomeView/>
+            <HomeView isLoggedIn={this.state.user}/>
           :
-            <ProfileView/>
+            <ProfileView user={this.state.user}/>
           }
         </div>
       </>

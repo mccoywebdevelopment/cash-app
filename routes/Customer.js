@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const validate = require('../config/validation');
+const passport = require('passport');
 const CustomerModel = require('../models/Customer');
 
 router.route('/register')
@@ -61,7 +62,7 @@ router.route('/login')
 });
 
 router.route('/find/all')
-.post((req,res)=>{
+.post(passport.authenticate('jwt', { session: false }),(req,res)=>{
     CustomerModel.find({},(err,docs)=>{
         if(err){
             return res.status(400).json(err);

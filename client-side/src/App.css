@@ -4,3 +4,21 @@
 .navbar-brand:hover{
     cursor: pointer;
 }
+/* .content{
+    height: 100%;
+    width: 100%;
+}
+html, body, #app, #app>div {
+    height: 100%
+  }
+#root{
+    height: inherit;
+} */
+body{
+    background-color:#ffffff;
+    font-family: 'Open Sans', sans-serif!important;
+}
+.my-nav{
+    background-color: #FF8500!important;
+    color:#ffffff;
+}
