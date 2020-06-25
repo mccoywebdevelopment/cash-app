@@ -14,7 +14,7 @@ class App extends React.Component {
   
   state = {
     selected:"home",
-    user:true,
+    user:null,
     items:[],
     subscribedItems:[],
     isLoaded:false
