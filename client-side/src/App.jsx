@@ -73,6 +73,7 @@ class App extends React.Component {
       <>
         {NavBar()}
         <div className="content">
+        <div className="container" style={{ marginTop: "5em" }}>
           {!this.state.isLoaded && this.state.selected =='shop'?
           <div className="h-100 d-flex justify-content-center align-items-center" style={{marginTop:'10em'}}>
             <PulseLoader size={100} color="#51B8C8"/>
@@ -86,6 +87,7 @@ class App extends React.Component {
           :
             <ProfileView user={this.state.user}/>
           }
+        </div>
         </div>
       </>
     )

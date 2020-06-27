@@ -70,3 +70,13 @@ body{
     min-height: 15em;
     padding: 2em;
 }
+.invalid-feedback{
+    display: block;
+    visibility: hidden;
+}
+.invalid-feedback-show{
+    visibility: visible;
+}
+.my-hide{
+    visibility: hidden;
+}

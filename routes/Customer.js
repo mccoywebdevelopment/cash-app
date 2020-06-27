@@ -35,6 +35,7 @@ router.route('/register')
 
 router.route('/login')
 .post((req,res)=>{
+    console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
 

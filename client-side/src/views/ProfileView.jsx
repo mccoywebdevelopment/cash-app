@@ -5,7 +5,9 @@ import LoginView from "./LoginView";
 export default class ProfileView extends React.Component {
   state = {
     isLogin:false,
-    isRegister:false
+    isRegister:false,
+
+    errMsg:""
   }
   constructor(props) {
     super(props);
@@ -28,24 +30,29 @@ export default class ProfileView extends React.Component {
     newState.isLogin = false;
     this.setState(newState);
   }
+  _updateErrMsg = (msg) =>{
+    let newState = this.state;
+     newState.errMsg = msg;
+     this.setState(newState)
+  }
   _renderOptions = () => {
       return(
-        <div className="container" style={{ marginTop: "3em" }}>
-            <div className="row card p-card" style={{minHeight:'30em'}}>
+            <div className="col-lg-12 card p-card" style={{minHeight:'30em'}}>
+                <div className="row">
                 <div className="col-lg-12 text-center">
                     <h1>Please select one of the following:</h1>
                 </div>
-                <div className="col-lg-12 d-inline text-center" style={{marginTop:'10em'}}>
+                <div className="col-lg-12 d-inline text-center" style={{marginTop:"10%"}}>
                     <button onClick={this._selectLogin} className="btn btn-primary btn-lg">Login</button>
                     <p style={{display:'inline',marginRight:'30px',marginLeft:'30px'}}>Or</p>
                     <button onClick={this._selectRegister} className="btn btn-primary btn-lg">Register</button>
                 </div>
+                </div>
             </div>
-        </div>
       );
   };
   _renderLogin = () =>{
-    return <LoginView toggleBack={this._selectProfile}/>
+    return <LoginView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg}/>
   }
   _renderRegister = () =>{
     return <p>register</p>
@@ -101,8 +108,12 @@ export default class ProfileView extends React.Component {
   };
   render() {
     return (
-      <div className="container">
-        <div className="row" style={{ marginTop: "5em" }}>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className={"alert alert-danger "+(this.state.errMsg.length==0?"my-hide":"")} role="alert">
+                {this.state.errMsg}
+            </div>
+          </div>
           {this.props.user ? 
             this._renderProfile()
           :!this.props.user && this.state.isLogin?
@@ -112,7 +123,6 @@ export default class ProfileView extends React.Component {
           :this._renderOptions()
           }
         </div>
-      </div>
     );
   }
 }
