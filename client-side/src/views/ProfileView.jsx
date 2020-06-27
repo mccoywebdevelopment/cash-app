@@ -1,6 +1,7 @@
 import React from "react";
 
 import LoginView from "./LoginView";
+import RegisterView from "./RegisterView";
 
 export default class ProfileView extends React.Component {
   state = {
@@ -31,6 +32,9 @@ export default class ProfileView extends React.Component {
     this.setState(newState);
   }
   _updateErrMsg = (msg) =>{
+    if(typeof(msg)=='object'){
+      msg = JSON.stringify(msg);
+    }
     let newState = this.state;
      newState.errMsg = msg;
      this.setState(newState)
@@ -55,7 +59,7 @@ export default class ProfileView extends React.Component {
     return <LoginView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg}/>
   }
   _renderRegister = () =>{
-    return <p>register</p>
+    return <RegisterView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg}/>
   }
   _renderProfile = () => {
     return (

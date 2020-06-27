@@ -1,5 +1,6 @@
 import React from "react";
 import { API_BASE_URL } from "../config/variables";
+import jwt_decode from "jwt-decode";
 
 export default class LoginView extends React.Component {
   state = {
@@ -59,6 +60,10 @@ export default class LoginView extends React.Component {
       .then((responseData) => {
         if(responseData.errorMsg){
           this.props.updateErrMsg(responseData.errorMsg);
+        }else{
+          alert(JSON.stringify(jwt_decode(responseData.jwt)));
+
+          localStorage.setItem("jwt",responseData.jwt);
         }
       });
   };
@@ -99,7 +104,7 @@ export default class LoginView extends React.Component {
                 "form-control " + (!this.state.isValidEmail ? "is-invalid" : "")
               }
               value={this.state.password}
-              id="email"
+              id="password"
               placeholder="password"
             />
             <div

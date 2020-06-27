@@ -67,7 +67,7 @@ body{
     width: 100%;
 }
 .p-card{
-    min-height: 15em;
+    min-height: 16em;
     padding: 2em;
 }
 .invalid-feedback{

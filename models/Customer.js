@@ -64,7 +64,10 @@ CustomerSchema.methods.comparePassword = function (candidatePassword, cb) {
 CustomerSchema.methods.signJWT = function (done) {
   const payload = {
     id: this._id,
-    name: this.username,
+    username: this.username,
+    name: this.name,
+    dateCreated: this.dateCreated,
+    orders: this.orders
   };
   jwt.sign(payload, keys.JWTKey, { expiresIn: 31556926 }, (err, token) => {
     if(err){

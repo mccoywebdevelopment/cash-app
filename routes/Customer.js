@@ -18,6 +18,7 @@ router.route('/register')
                 return res.status(400).json({errorMsg:"User already exists."});
             }else{
                 const newCustomer = new CustomerModel({
+                    name:req.body.name,
                     username:req.body.email,
                     password:req.body.password
                 });
@@ -25,7 +26,13 @@ router.route('/register')
                     if(err){
                         return res.status(400).json({errorMsg:err});
                     }else{
-                        return res.status(200).json({sucessMsg:"Created customer!"});
+                        docCreated.signJWT((err,jwt)=>{
+                            if(err){
+                                return res.status(400).json({errorMsg:err});
+                            }else{
+                                return res.status(200).json({jwt:jwt});
+                            }
+                        });
                     }
                 });
             }
@@ -53,7 +60,7 @@ router.route('/login')
                         if(err){
                             return res.status(400).json({errorMsg:err});
                         }else{
-                            return res.status(200).json(jwt);
+                            return res.status(200).json({jwt:jwt});
                         }
                     });
                 }
