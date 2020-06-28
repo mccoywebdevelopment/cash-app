@@ -56,14 +56,22 @@ export default class ProfileView extends React.Component {
       );
   };
   _renderLogin = () =>{
-    return <LoginView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg}/>
+    return <LoginView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg} updateUser={this.props.updateUser}/>
   }
   _renderRegister = () =>{
-    return <RegisterView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg}/>
+    return <RegisterView toggleBack={this._selectProfile} updateErrMsg={this._updateErrMsg} updateUser={this.props.updateUser}/>
   }
   _renderProfile = () => {
+    var date = new Date(this.props.user.dateCreated);
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+    
+    var formattedDate =  month + '/' + day + '/' + year;
     return (
-      <div className="container" style={{ marginTop: "3em" }}>
+      <div className="container">
         <div className="row">
           <div className="col-md-4" style={{ flex: "1" }}>
             <div className="card p-card" style={{ minHeight: "100%" }}>
@@ -78,18 +86,23 @@ export default class ProfileView extends React.Component {
               <div className="col-lg-12" style={{ marginTop: "30px" }}>
                 <h5 style={{ fontWeight: "bold" }}>My Profile:</h5>
               </div>
-              <div className="row" style={{ marginTop: "5em" }}>
+              <div className="row" style={{ marginTop: "2em" }}>
                 <div className="col-lg-6">
-                  <h5 style={{ fontWeight: "500" }}>Name:</h5>
+                  <h5 style={{ fontWeight: "500"}}>Name:</h5>
                 </div>
                 <div className="col-lg-6">
-                  <p style={{ float: "right" }}>Chris McCoy</p>
+                  <p style={{ float: "right", textAlign:'end'}}>{this.props.user.name}</p>
                 </div>
-                <div className="col-lg-7" style={{ marginTop: "30px" }}>
+                <div className="col-lg-7" style={{ marginTop: "15px" }}>
                   <h5 style={{ fontWeight: "500" }}>Date Created:</h5>
                 </div>
-                <div className="col-lg-5" style={{ marginTop: "30px" }}>
-                  <p style={{ float: "right" }}>12/17/2020</p>
+                <div className="col-lg-5" style={{ marginTop: "15px" }}>
+                  <p style={{ float: "right" }}>{formattedDate}</p>
+                </div>
+              </div>
+              <div className="row" style={{flex:'1'}}>
+                <div className="col-lg-12">
+                  <button className="btn btn-primary" style={{position:"absolute",bottom:'0'}}>Logout</button>
                 </div>
               </div>
             </div>

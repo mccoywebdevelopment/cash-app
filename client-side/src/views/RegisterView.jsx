@@ -73,9 +73,11 @@ export default class RegisterView extends React.Component {
         if(responseData.errorMsg){
           this.props.updateErrMsg(responseData.errorMsg);
         }else{
-          alert(JSON.stringify(jwt_decode(responseData.jwt)));
+          var jwt = responseData.jwt;
+          var user = jwt_decode(jwt);
 
-          localStorage.setItem("jwt",responseData.jwt);
+          localStorage.setItem("jwt",jwt);
+          this.props.updateUser(user);
         }
       });
   };
@@ -87,7 +89,7 @@ export default class RegisterView extends React.Component {
             <h1>Register:</h1>
           </div>
           <div className="col-lg-6 offset-lg-3">
-            <label for="name">Name</label>
+            <label htmlFor="name">Name</label>
             <input
               type="string"
               onChange={this._toggleName.bind(this)}
@@ -108,7 +110,7 @@ export default class RegisterView extends React.Component {
             </div>
           </div>
           <div className="col-lg-6 offset-lg-3">
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               onChange={this._toggleEmail.bind(this)}
@@ -129,7 +131,7 @@ export default class RegisterView extends React.Component {
             </div>
           </div>
           <div className="col-lg-6 offset-lg-3">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               onChange={this._togglePassword.bind(this)}

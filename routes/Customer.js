@@ -69,11 +69,36 @@ router.route('/login')
     });
 });
 
+router.route('/logout')
+.post(passport.authenticate('jwt',{ session: false}),(req,res)=>{
+    if (!req.headers.authorization || !req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return res.status(400).json({errorMsg:"No token provided."});
+    }else if(!req.body.userID){
+        return res.status(400).json({errorMsg:"Please provide req.body.userID"});
+    }else{
+        const jwtToken = req.headers.authorization.split(' ')[1];
+        CustomerModel.findById(req.body.userID,(err,doc)=>{
+            if(err){
+                return res.status(400).json({errorMsg:err});
+            }else{
+                doc.expTokens.push(jwtToken);
+                doc.save((err,docSaved)=>{
+                    if(err){
+                        return res.status(400).json({errorMsg:err});
+                    }else{
+                        return res.status(200).json({result:"Logged out"});
+                    }
+                });
+            }
+        });
+    }
+});
+
 router.route('/find/all')
 .post(passport.authenticate('jwt', { session: false }),(req,res)=>{
     CustomerModel.find({},(err,docs)=>{
         if(err){
-            return res.status(400).json(err);
+            return res.status(400).json({errorMsg:err});
         }else{
             return res.status(200).json({result:docs});
         }

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const SALT_WORK_FACTOR = 12;
 const bcrypt = require("bcrypt-nodejs");
-const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const keys = require('../config/secret');
 
@@ -10,7 +9,9 @@ var CustomerSchema = new mongoose.Schema({
   password: { type: String, min: 8, required: true, select: false },
   dateCreated: { type: Date, default: new Date() },
   name:{type:String, required: true},
-  token: { type: String, default: crypto.randomBytes(256), select: false },
+  expTokens:[{
+    type:String
+  }],
   orders: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,11 +21,9 @@ var CustomerSchema = new mongoose.Schema({
 });
 
 CustomerSchema.pre("save", function (next) {
-  console.log("save");
   var user = this;
   // only hash the password if it has been modified (or is new)
-  if (!user.isModified("password")) {
-    console.log("Not modified");
+if (!user.isModified("password")) {
     next();
   } else {
     bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {

@@ -19,6 +19,11 @@ class App extends React.Component {
     subscribedItems:[],
     isLoaded:false
   }
+  _updateUser = (user) =>{
+    let newState = this.state;
+    newState.user = user;
+    this.setState(newState);
+  }
   _toggleLink = (name) =>{
     let newState = this.state;
     newState.selected = name;
@@ -85,7 +90,7 @@ class App extends React.Component {
             :this.state.selected=='home'?
             <HomeView isLoggedIn={this.state.user}/>
           :
-            <ProfileView user={this.state.user}/>
+            <ProfileView user={this.state.user} updateUser={this._updateUser}/>
           }
         </div>
         </div>
