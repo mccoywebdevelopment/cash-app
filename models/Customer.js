@@ -68,7 +68,7 @@ CustomerSchema.methods.signJWT = function (done) {
     dateCreated: this.dateCreated,
     orders: this.orders
   };
-  jwt.sign(payload, keys.JWTKey, { expiresIn: 31556926 }, (err, token) => {
+  jwt.sign(payload, keys.JWTKey, { expiresIn: 172800 }, (err, token) => {
     if(err){
         done(err);
     }else{

@@ -80,3 +80,6 @@ body{
 .my-hide{
     visibility: hidden;
 }
+.card{
+    border:none;
+}

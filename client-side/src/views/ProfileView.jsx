@@ -1,4 +1,5 @@
 import React from "react";
+import { API_BASE_URL } from "../config/variables";
 
 import LoginView from "./LoginView";
 import RegisterView from "./RegisterView";
@@ -12,6 +13,31 @@ export default class ProfileView extends React.Component {
   }
   constructor(props) {
     super(props);
+  }
+  _fetchLogout = async() =>{
+    const bearer = 'Bearer ' + localStorage.getItem("jwt");
+    console.log(this.props.user);
+    await fetch(API_BASE_URL + "/customer/logout", {
+      method: "POST",
+      body:JSON.stringify({
+        userID:this.props.user.id
+      }),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization': bearer
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        if(responseData.errorMsg){
+          this._updateErrMsg(responseData.errorMsg);
+        }else{
+          localStorage.setItem("jwt",null);
+          this.props.updateUser(null);
+        }
+      });
   }
   _selectRegister = () =>{
     let newState = this.state;
@@ -102,7 +128,7 @@ export default class ProfileView extends React.Component {
               </div>
               <div className="row" style={{flex:'1'}}>
                 <div className="col-lg-12">
-                  <button className="btn btn-primary" style={{position:"absolute",bottom:'0'}}>Logout</button>
+                  <button onClick={this._fetchLogout} className="btn btn-primary" style={{position:"absolute",bottom:'0'}}>Logout</button>
                 </div>
               </div>
             </div>

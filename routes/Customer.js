@@ -74,6 +74,7 @@ router.route('/logout')
     if (!req.headers.authorization || !req.headers.authorization.split(' ')[0] === 'Bearer') {
         return res.status(400).json({errorMsg:"No token provided."});
     }else if(!req.body.userID){
+        console.log(req.body);
         return res.status(400).json({errorMsg:"Please provide req.body.userID"});
     }else{
         const jwtToken = req.headers.authorization.split(' ')[1];

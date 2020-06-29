@@ -9,8 +9,6 @@ opts.passReqToCallback = true;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (req, jwt_payload, done) => {
-      console.log("yo");
-      console.log(req);
       CustomerModel.findById(jwt_payload.id)
         .then(user => {
           if (user) {
