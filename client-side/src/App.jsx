@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "./App.css";
 import {API_BASE_URL} from "./config/variables";
-import PulseLoader from "react-spinners/PulseLoader";
+import ClipLoader from "react-spinners/BeatLoader";
 
 import CartView from "./views/CartView";
 import ProfileView from "./views/ProfileView";
@@ -17,7 +17,8 @@ class App extends React.Component {
     user:null,
     items:[],
     subscribedItems:[],
-    isLoaded:false
+    isLoaded:false,
+    cartNumber:0
   }
   _updateUser = (user) =>{
     let newState = this.state;
@@ -41,10 +42,37 @@ class App extends React.Component {
       this.setState(newState);
     });
   }
+  _updateCartNumber = () =>{
+    let newState = this.state;
+    var count = 0;
+    for(var i=0;i<newState.subscribedItems.length;++i){
+      if(!newState.subscribedItems[i].quantity){
+        count++;
+      }else{
+        count = count + newState.subscribedItems[i].quantity;
+      }
+    }
+    newState.cartNumber = count;
+    this.setState(newState);
+  }
   _addItemToCart=(item)=>{
     let newState = this.state;
-    newState.subscribedItems.push(item);
+    var found = false;
+    for(var i=0;i<newState.subscribedItems.length;++i){
+      if(newState.subscribedItems[i]._id == item._id){
+        found = true;
+        if(newState.subscribedItems[i].quantity){
+          newState.subscribedItems[i].quantity++;
+        }else{
+          newState.subscribedItems[i].quantity = 2;
+        }
+      }
+    }
+    if(!found){
+      newState.subscribedItems.push(item);
+    }
     this.setState(newState);
+    this._updateCartNumber();
   }
   componentDidMount = () =>{
     this._fetchItems();
@@ -64,7 +92,7 @@ class App extends React.Component {
               <a className="nav-link">Shop</a>
             </li>
             <li onClick={(e)=>{this._toggleLink('cart')}} className={"nav-item "+ (this.state.selected == 'cart' ? 'active' : '')}>
-            <a className="nav-link">Cart<sup>{this.state.subscribedItems.length}</sup></a>
+            <a className="nav-link">Cart<sup>{this.state.cartNumber}</sup></a>
             </li>
             <li onClick={(e)=>{this._toggleLink('profile')}} className={"nav-item "+ (this.state.selected == 'profile' ? 'active' : '')}>
               <a className="nav-link">Profile</a>
@@ -80,8 +108,8 @@ class App extends React.Component {
         <div className="content">
         <div className="container" style={{ marginTop: "5em" }}>
           {!this.state.isLoaded && this.state.selected =='shop'?
-          <div className="h-100 d-flex justify-content-center align-items-center" style={{marginTop:'10em'}}>
-            <PulseLoader size={100} color="#51B8C8"/>
+          <div className="h-100 d-flex justify-content-center align-items-center" style={{marginTop:'20em'}}>
+            <ClipLoader size={100} color="#51B8C8"/>
           </div>
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>

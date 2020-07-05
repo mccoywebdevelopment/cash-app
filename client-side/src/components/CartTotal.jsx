@@ -14,7 +14,7 @@ export default class CartTotal extends React.Component{
                     <div className="col-lg-12 text-center">
                         <h5>$34.89</h5>
                     </div>
-                    <div className="col-lg-12 text-center">
+                    <div className="col-lg-12 text-center" style={{marginTop:"30px"}}>
                         <button className="btn btn-primary" style={{width:"100%"}}>Checkout</button>
                     </div>
                 </div>

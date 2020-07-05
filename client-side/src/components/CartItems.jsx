@@ -7,24 +7,43 @@ export default class CartItems extends React.Component{
         super(props);
     }
     render(){
-        return(
-            <div className="card" style={{padding:"8px"}}>
-                <div className="row">
-                    <div className="col-lg-4">
-                        <img className="img-fluid" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
-                    </div>
-                    <div className="col-lg-8">
+        const list = ()=>{
+            return this.props.items.map((item,index)=>{
+                return(
+                    <div className="card" style={{padding:"8px",marginBottom:"30px"}}>
                         <div className="row">
-                            <div className="col-lg-10">
-                                <h2>Headphones</h2>
+                            <div className="col-lg-4">
+                                <img className="img-fluid" src={item.imageURL}/>
                             </div>
-                            <div className="col-lg-2">
-                                <FontAwesomeIcon icon={faTimes} color="red" style={{float:"right",fontSize:"25px",cursor:"pointer"}}/>
+                            <div className="col-lg-8">
+                                <div className="row" style={{height:"100%"}}>
+                                    <div className="col-lg-10">
+                                        <h2>{item.title}</h2>
+                                    </div>
+                                    <div className="col-lg-2">
+                                        <FontAwesomeIcon icon={faTimes} color="red" style={{float:"right",fontSize:"25px",cursor:"pointer"}}/>
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <h5 style={{position:"absolute",bottom:0}}>Price: ${item.price}</h5>
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <div style={{position:"absolute",bottom:0,float:"right"}}>
+                                            <span class="input-number-decrement">–</span>
+                                            <input class="input-number" type="text" value={item.quantity || 1} min="0" max="10"/>
+                                            <span class="input-number-increment">+</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        );
+                );
+            })
+        }
+        return(
+            <>
+                {list()}
+            </>
+        )
     }
 }

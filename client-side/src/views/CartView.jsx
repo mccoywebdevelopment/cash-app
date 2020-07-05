@@ -13,7 +13,7 @@ export default class CartView extends React.Component{
                 <div className="col-lg-12">
                     <div className="row">
                         <div className="col-lg-8">
-                            <CartItems/>
+                            <CartItems items={this.props.items}/>
                         </div>
                         <div className="col-lg-4">
                             <CartTotal/>
