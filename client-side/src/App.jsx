@@ -58,7 +58,7 @@ class App extends React.Component {
   _addItemToCart=(item)=>{
     let newState = this.state;
     var found = false;
-    for(var i=0;i<newState.subscribedItems.length;++i){
+    for(var i=0;i<newState.subscribedItems.length && !found;++i){
       if(newState.subscribedItems[i]._id == item._id){
         found = true;
         if(newState.subscribedItems[i].quantity){
@@ -70,6 +70,34 @@ class App extends React.Component {
     }
     if(!found){
       newState.subscribedItems.push(item);
+    }
+    this.setState(newState);
+    this._updateCartNumber();
+  }
+  _deleteItemFromCart=(item)=>{
+    let newState = this.state;
+    var found = false;
+    for(var i=0;i<newState.subscribedItems.length && !found;++i){
+      if(newState.subscribedItems[i]._id == item._id){
+        found = true;
+        newState.subscribedItems.splice(i,1);
+      }
+    }
+    this.setState(newState);
+    this._updateCartNumber();
+  }
+  _removeItemFromCart=(item)=>{
+    let newState = this.state;
+    var found = false;
+    for(var i=0;i<newState.subscribedItems.length && !found;++i){
+      if(newState.subscribedItems[i]._id == item._id){
+        found = true;
+        if(newState.subscribedItems[i].quantity>1){
+          newState.subscribedItems[i].quantity--;
+        }else{
+          newState.subscribedItems.splice(i,1);
+        }
+      }
     }
     this.setState(newState);
     this._updateCartNumber();
@@ -114,7 +142,7 @@ class App extends React.Component {
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
           :this.state.selected=='cart'?
-            <CartView items={this.state.subscribedItems}/>
+            <CartView items={this.state.subscribedItems} delete={this._deleteItemFromCart} add={this._addItemToCart} remove={this._removeItemFromCart}/>
             :this.state.selected=='home'?
             <HomeView isLoggedIn={this.state.user}/>
           :

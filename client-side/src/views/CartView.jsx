@@ -27,7 +27,7 @@ export default class CartView extends React.Component{
                 <div className="col-lg-12">
                     <div className="row">
                         <div className="col-lg-8">
-                            <CartItems items={this.props.items}/>
+                            <CartItems delete={this.props.delete} add={this.props.add} remove={this.props.remove} items={this.props.items}/>
                         </div>
                         <div className="col-lg-4">
                             <CartTotal total={this._getTotal()}/>
