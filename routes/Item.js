@@ -37,7 +37,7 @@ router.route('/')
                 return res.json({items});
             }
         });
-    },4000);
+    },0);
 });
 
 module.exports = router;

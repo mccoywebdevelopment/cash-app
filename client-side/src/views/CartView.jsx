@@ -4,6 +4,20 @@ import CartItems from "../components/CartItems";
 import CartTotal from "../components/CartTotal";
 
 export default class CartView extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    _getTotal=()=>{
+        var total = 0;
+        for(var i=0;i<this.props.items.length;++i){
+            if(this.props.items[i].quantity){
+                total = total + this.props.items[i].quantity * this.props.items[i].price;
+            }else{
+                total = total + this.props.items[i].price;
+            }
+        }
+        return total;
+    }
     render(){
         return(
             <div className="row">
@@ -16,7 +30,7 @@ export default class CartView extends React.Component{
                             <CartItems items={this.props.items}/>
                         </div>
                         <div className="col-lg-4">
-                            <CartTotal/>
+                            <CartTotal total={this._getTotal()}/>
                         </div>
                     </div>
                 </div>

@@ -28,9 +28,13 @@ export default class CartItems extends React.Component{
                                     </div>
                                     <div className="col-lg-6">
                                         <div style={{position:"absolute",bottom:0,float:"right"}}>
-                                            <span class="input-number-decrement">–</span>
-                                            <input class="input-number" type="text" value={item.quantity || 1} min="0" max="10"/>
-                                            <span class="input-number-increment">+</span>
+                                            {item.quantity==1 || !item.quantity?
+                                                <span className="input-number-decrement my-disable">–</span>
+                                            :
+                                                <span className="input-number-decrement">–</span>
+                                            }
+                                            <input className="input-number" type="text" value={item.quantity || 1} min="0" max="10"/>
+                                            <span className="input-number-increment">+</span>
                                         </div>
                                     </div>
                                 </div>
