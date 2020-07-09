@@ -71,7 +71,7 @@ export default class ProfileView extends React.Component {
       <div className="col-lg-12 card p-card" style={{ minHeight: "30em" }}>
         <div className="row">
           <div className="col-lg-6 h-100">
-            <img src={secureImage} style={{width:"100%"}}/>s
+            <img src={secureImage} style={{width:"100%"}}/>
           </div>
           <div className="col-lg-6 h-100 text-center">
             <div className="col-lg-12">

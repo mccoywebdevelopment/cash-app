@@ -19,11 +19,16 @@ class App extends React.Component {
     items:[],
     subscribedItems:[],
     isLoaded:false,
-    cartNumber:0
+    cartNumber:0,
+    isCheckout:false
   }
   _updateUser = (user) =>{
     let newState = this.state;
     newState.user = user;
+    if(newState.isCheckout){
+      newState.isCheckout = false;
+      this._toggleLink('checkout');
+    }
     this.setState(newState);
   }
   _toggleLink = (name) =>{
@@ -56,9 +61,6 @@ class App extends React.Component {
     this.setState(newState);
   }
   _addItemToCart=(item)=>{
-    console.log("test==============")
-    console.log(this.state);
-    console.log(item);
     let newState = this.state;
     var found = false;
     for(var i=0;i<newState.subscribedItems.length && !found;++i){
@@ -90,6 +92,12 @@ class App extends React.Component {
     this.setState(newState);
     this._updateCartNumber();
     console.log(this.state);
+  }
+  _toggleCheckout = () =>{
+    let newState = this.state;
+    newState.isCheckout = true;
+    this._toggleLink('checkout');
+    this.setState(newState);
   }
   _removeItemFromCart=(item)=>{
     let newState = this.state;
@@ -147,14 +155,14 @@ class App extends React.Component {
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
           :this.state.selected=='checkout'?
-            <CheckoutView nav={this._toggleLink}/>
+            <CheckoutView nav={this._toggleLink} user={this.state.user}/>
           :this.state.selected=='cart'?
             <CartView items={this.state.subscribedItems} delete={this._deleteItemFromCart} add={this._addItemToCart} 
-              remove={this._removeItemFromCart} nav={this._toggleLink}/>
+              remove={this._removeItemFromCart} nav={this._toggleLink} toggleCheckout={this._toggleCheckout}/>
             :this.state.selected=='home'?
             <HomeView isLoggedIn={this.state.user}/>
           :
-            <ProfileView user={this.state.user} updateUser={this._updateUser}/>
+            <ProfileView isCheckout={this.state.isCheckout} user={this.state.user} nav={this._toggleLink} updateUser={this._updateUser}/>
           }
         </div>
         </div>
