@@ -15,7 +15,7 @@ export default class CartTotal extends React.Component{
                         <h5>$ {this.props.total.toFixed(2)}</h5>
                     </div>
                     <div className="col-lg-12 text-center" style={{marginTop:"30px"}}>
-                        <button className="btn btn-primary" style={{width:"100%"}}>Checkout</button>
+                        <button className="btn btn-primary" onClick={()=>{this.props.nav('checkout')}} style={{width:"100%"}}>Checkout</button>
                     </div>
                 </div>
             </div>

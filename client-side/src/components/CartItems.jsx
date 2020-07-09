@@ -21,12 +21,13 @@ export default class CartItems extends React.Component{
                                         <h2>{item.title}</h2>
                                     </div>
                                     <div className="col-lg-2">
-                                        <FontAwesomeIcon onClick={()=>{this.props.delete(item)}} icon={faTimes} color="red" style={{float:"right",fontSize:"25px",cursor:"pointer"}}/>
+                                        <FontAwesomeIcon onClick={()=>{this.props.delete(item)}} icon={faTimes} color="black" style={{float:"right",fontSize:"25px",cursor:"pointer"}}/>
                                     </div>
                                     <div className="col-lg-6">
                                         <h5 style={{position:"absolute",bottom:0}}>Price: ${item.price}</h5>
                                     </div>
                                     <div className="col-lg-6">
+                                        <p>Quantity:</p>
                                         <div style={{position:"absolute",bottom:0,float:"right"}}>
                                             {item.quantity==1 || !item.quantity?
                                                 <span className="input-number-decrement my-disable">–</span>
