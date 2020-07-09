@@ -14,7 +14,7 @@ import CheckoutView from "./views/CheckoutView";
 class App extends React.Component {
   
   state = {
-    selected:"shop",
+    selected:"checkout",
     user:null,
     items:[],
     subscribedItems:[],

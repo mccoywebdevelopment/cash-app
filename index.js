@@ -23,5 +23,7 @@ app.use(cors());
 
 app.use('/customer',require('./routes/Customer'));
 app.use('/item',require('./routes/Item'));
+app.use(passport.authenticate('jwt', { session: false }));
+app.use('/payment',require('./routes/Payment'));
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

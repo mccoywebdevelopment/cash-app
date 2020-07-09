@@ -11,7 +11,6 @@ router.route('/register')
         return res.status(400).json({errors});
     }else{
         CustomerModel.findOne({username:req.body.email},(err,doc)=>{
-            console.log(doc);
             if(err){
                 return res.status(400).json({errorMsg:err});
             }else if(doc){
@@ -42,7 +41,6 @@ router.route('/register')
 
 router.route('/login')
 .post((req,res)=>{
-    console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
 
@@ -74,7 +72,6 @@ router.route('/logout')
     if (!req.headers.authorization || !req.headers.authorization.split(' ')[0] === 'Bearer') {
         return res.status(400).json({errorMsg:"No token provided."});
     }else if(!req.body.userID){
-        console.log(req.body);
         return res.status(400).json({errorMsg:"Please provide req.body.userID"});
     }else{
         const jwtToken = req.headers.authorization.split(' ')[1];

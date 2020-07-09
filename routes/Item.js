@@ -10,7 +10,6 @@ router.route('/create')
     const price = req.body.price;
     const description = req.body.description;
 
-    console.log(req.body.title)
     var newItem = new ItemModel({
         title:title,
         imageURL:imgURL,
