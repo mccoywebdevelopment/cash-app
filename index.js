@@ -26,4 +26,4 @@ app.use('/item',require('./routes/Item'));
 app.use(passport.authenticate('jwt', { session: false }));
 app.use('/payment',require('./routes/Payment'));
 
-app.listen(port, () => console.log(`Server up and running on port ${port} !`));
+app.listen(port, () => console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nServer up and running on port ${port} !`));

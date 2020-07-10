@@ -1,8 +1,10 @@
 import React from "react";
 import stripePic from "./images/stripe.svg";
+import { API_BASE_URL } from "../config/variables";
 import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import BarLoader from "react-spinners/BarLoader";
 
 import StripeForm from "../components/StripeForm";
 
@@ -11,21 +13,56 @@ export default class CheckoutView extends React.Component {
     showDetails: true,
     creditCardNumber:"4242424242424242",
     creditCardExp:"2/23",
-    creditCardCVC:"675"
+    creditCardCVC:"675",
+    CLIENT_SECRET:null,
+    errMsg: ""
   };
+  constructor(props) {
+    super(props);
+    if(!this.props.user){
+        this.props.nav("profile");
+    }
+  }
+  componentDidMount = () =>{
+    this._fetchClientSecrete();
+  }
   _toggleDetails = () => {
     let newState = this.state;
     newState.showDetails = !newState.showDetails;
     this.setState(newState);
   };
-  constructor(props) {
-    super(props);
-
-    // if(!this.props.user){
-    //     this.props.nav("profile");
-    // }
+  _updateErrMsg = (msg) => {
+    if (typeof msg == "object") {
+      msg = JSON.stringify(msg);
+    }
+    let newState = this.state;
+    newState.errMsg = msg;
+    this.setState(newState);
+  };
+  _fetchClientSecrete = async() =>{
+    const bearer = "Bearer " + localStorage.getItem("jwt");
+    await fetch(API_BASE_URL+"/payment/send-intent",{
+      body:JSON.stringify({items:this.props.items}),
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: bearer,
+      },
+    }).then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      if (responseData.errorMsg) {
+        // alert(JSON.stringify(responseData));
+        this._updateErrMsg(responseData.errorMsg);
+      } else{
+        let newState = this.state;
+        newState.CLIENT_SECRET = responseData.client_secret;
+        // alert(JSON.stringify(responseData));
+        this.setState(newState);
+      }
+    });
   }
-
   _renderPayment = () => {
     return <></>;
   };
@@ -36,6 +73,17 @@ export default class CheckoutView extends React.Component {
     }
     return (
       <div className="row">
+        <div className="col-lg-12">
+          <div
+            className={
+              "alert alert-danger " +
+              (this.state.errMsg.length == 0 ? "my-hide" : "")
+            }
+            role="alert"
+          >
+            {this.state.errMsg}
+          </div>
+        </div>
         <div className="col-lg-12 text-center">
           <h1>Checkout:</h1>
         </div>
@@ -154,7 +202,13 @@ export default class CheckoutView extends React.Component {
                     </>
                   ) : null}
                   <label>Card Details:</label>
-                  <StripeForm />
+                  {this.state.CLIENT_SECRET?
+                    <StripeForm CLIENT_SECRET={this.state.CLIENT_SECRET}/>
+                    :
+                    <div style={{marginTop:"30px"}}>
+                      <BarLoader size={100} width={"100%"} color="#51B8C8"/>
+                    </div>
+                  }
                   <div className="row" style={{ marginTop: "30px" }}>
                     <div className="col-lg-12">
                       <p style={{ color: "#6c757d" }}>3D Security by:</p>

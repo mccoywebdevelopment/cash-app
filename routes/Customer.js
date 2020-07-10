@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const validate = require('../config/validation');
 const passport = require('passport');
+const {JWTKey} = require('../config/secret');
+const jwt = require("jsonwebtoken");
 const CustomerModel = require('../models/Customer');
 
 router.route('/register')
@@ -75,20 +77,25 @@ router.route('/logout')
         return res.status(400).json({errorMsg:"Please provide req.body.userID"});
     }else{
         const jwtToken = req.headers.authorization.split(' ')[1];
-        CustomerModel.findById(req.body.userID,(err,doc)=>{
-            if(err){
-                return res.status(400).json({errorMsg:err});
-            }else{
-                doc.expTokens.push(jwtToken);
-                doc.save((err,docSaved)=>{
-                    if(err){
-                        return res.status(400).json({errorMsg:err});
-                    }else{
-                        return res.status(200).json({result:"Logged out"});
-                    }
-                });
-            }
-        });
+        const user = jwt.verify(jwtToken, JWTKey);
+        if(user.id != req.body.userID){
+            return res.status(400).json({errorMsg:"body.userID != decoded user"});
+        }else{
+            CustomerModel.findById(req.body.userID,(err,doc)=>{
+                if(err){
+                    return res.status(400).json({errorMsg:err});
+                }else{
+                    doc.expTokens.push(jwtToken);
+                    doc.save((err,docSaved)=>{
+                        if(err){
+                            return res.status(400).json({errorMsg:err});
+                        }else{
+                            return res.status(200).json({result:"Logged out"});
+                        }
+                    });
+                }
+            });
+        }
     }
 });
 

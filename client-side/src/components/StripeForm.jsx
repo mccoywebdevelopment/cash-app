@@ -1,7 +1,7 @@
 import {CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import React from "react";
 
-const StripeForm = () => {
+const StripeForm = (props) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -10,26 +10,33 @@ const StripeForm = () => {
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
-    // Get a reference to a mounted CardElement. Elements knows how
-    // to find your CardElement because there can only ever be one of
-    // each type of element.
-    const cardElement = elements.getElement(CardElement);
-
-    // Use your card Element with other Stripe.js APIs
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
+    const result = await stripe.confirmCardPayment(props.CLIENT_SECRET, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      }
     });
 
-    if (error) {
-      console.log('[error]', error);
+    if (result.error) {
+      // Show error to your customer (e.g., insufficient funds)
+      console.log(result.error.message);
     } else {
-      console.log('[PaymentMethod]', paymentMethod);
+      // The payment has been processed!
+      if (result.paymentIntent.status === 'succeeded') {
+        // Show a success message to your customer
+        // There's a risk of the customer closing the window before callback
+        // execution. Set up a webhook or plugin to listen for the
+        // payment_intent.succeeded event that handles any business critical
+        // post-payment actions.
+        alert("success")
+      }
     }
   };
   const CARD_ELEMENT_OPTIONS = {
