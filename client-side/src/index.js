@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
 import * as serviceWorker from "./serviceWorker";
-
-const stripePromise = loadStripe("pk_test_ttj4Nu9PA6N5g7X552cLoPqF");
 
 ReactDOM.render(
   <React.StrictMode>
