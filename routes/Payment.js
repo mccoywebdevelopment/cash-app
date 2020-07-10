@@ -36,11 +36,34 @@ router.route("/send-intent")
                                 currency: 'usd',
                                 payment_method_types: ['card'],
                             }).then((result)=>{
-                                return res.status(200).json({client_secret: result.client_secret})
+                                return res.status(200).json({client_secret: result.client_secret,total:savedDoc.cart.totalPrice})
                             });
-                            // return res.status(200).json({client_secret: "YOLO"})
                         }
                     })
+                }
+            });
+        }
+    });
+});
+
+router.route('/update-order')
+.post((req,res)=>{
+    const jwtToken = req.headers.authorization.split(' ')[1];
+    const user = jwt.verify(jwtToken, JWTKey);
+    CustomerModel.findById(user.id,function(err,userFound){
+        if(err){
+            return res.status(400).json({errorMsg:err});
+        }else if(!userFound){
+            return res.status(400).json({errorMsg:"User not found."});
+        }else{
+            const cart = userFound.cart;
+            userFound.cart = null;
+            userFound.orders.push(cart);
+            userFound.save((err,userSaved)=>{
+                if(err){
+                    return res.status(400).json({errorMsg:err});
+                }else{
+                    return res.status(400).json({result:"Success!"});
                 }
             });
         }

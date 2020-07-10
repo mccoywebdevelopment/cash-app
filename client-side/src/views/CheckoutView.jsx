@@ -3,28 +3,58 @@ import stripePic from "./images/stripe.svg";
 import { API_BASE_URL } from "../config/variables";
 import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import BarLoader from "react-spinners/BarLoader";
 
 import StripeForm from "../components/StripeForm";
 
 export default class CheckoutView extends React.Component {
   state = {
-    showDetails: true,
-    creditCardNumber:"4242424242424242",
-    creditCardExp:"2/23",
-    creditCardCVC:"675",
-    CLIENT_SECRET:null,
-    errMsg: ""
+    showDetails: false,
+    creditCardNumber: "4242424242424242",
+    creditCardExp: "2/23",
+    creditCardCVC: "675",
+    CLIENT_SECRET: null,
+    total: null,
+    errMsg: "",
+    successMsg: "",
   };
   constructor(props) {
     super(props);
-    if(!this.props.user){
-        this.props.nav("profile");
+    if (!this.props.user) {
+      this.props.nav("profile");
     }
   }
-  componentDidMount = () =>{
+  _toggleSuccessMsg = () => {
+    let newState = this.state;
+    newState.successMsg = "Successfully created payment.";
+    this.setState(newState);
+    this._fetchUpdateOrder();
+    this.props.reset();
+    setTimeout(() => {
+      this.props.nav("profile");
+    }, 3000);
+  };
+  componentDidMount = () => {
     this._fetchClientSecrete();
+  };
+  _fetchUpdateOrder = async() =>{
+    const bearer = "Bearer " + localStorage.getItem("jwt");
+    await fetch(API_BASE_URL + "/payment/update-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: bearer,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        if (responseData.errorMsg) {
+          this._updateErrMsg(responseData.errorMsg);
+        }
+      });
   }
   _toggleDetails = () => {
     let newState = this.state;
@@ -39,30 +69,30 @@ export default class CheckoutView extends React.Component {
     newState.errMsg = msg;
     this.setState(newState);
   };
-  _fetchClientSecrete = async() =>{
+  _fetchClientSecrete = async () => {
     const bearer = "Bearer " + localStorage.getItem("jwt");
-    await fetch(API_BASE_URL+"/payment/send-intent",{
-      body:JSON.stringify({items:this.props.items}),
-      method:"POST",
+    await fetch(API_BASE_URL + "/payment/send-intent", {
+      body: JSON.stringify({ items: this.props.items }),
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: bearer,
       },
-    }).then((response) => {
-      return response.json();
     })
-    .then((responseData) => {
-      if (responseData.errorMsg) {
-        // alert(JSON.stringify(responseData));
-        this._updateErrMsg(responseData.errorMsg);
-      } else{
-        let newState = this.state;
-        newState.CLIENT_SECRET = responseData.client_secret;
-        // alert(JSON.stringify(responseData));
-        this.setState(newState);
-      }
-    });
-  }
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        if (responseData.errorMsg) {
+          this._updateErrMsg(responseData.errorMsg);
+        } else {
+          let newState = this.state;
+          newState.CLIENT_SECRET = responseData.client_secret;
+          newState.total = responseData.total;
+          this.setState(newState);
+        }
+      });
+  };
   _renderPayment = () => {
     return <></>;
   };
@@ -74,15 +104,27 @@ export default class CheckoutView extends React.Component {
     return (
       <div className="row">
         <div className="col-lg-12">
-          <div
-            className={
-              "alert alert-danger " +
-              (this.state.errMsg.length == 0 ? "my-hide" : "")
-            }
-            role="alert"
-          >
-            {this.state.errMsg}
-          </div>
+          {this.state.errMsg.length > 0 ? (
+            <div
+              className={
+                "alert alert-danger " +
+                (this.state.errMsg.length == 0 ? "my-hide" : "")
+              }
+              role="alert"
+            >
+              {this.state.errMsg}
+            </div>
+          ) : (
+            <div
+              className={
+                "alert alert-success " +
+                (this.state.successMsg.length == 0 ? "my-hide" : "")
+              }
+              role="alert"
+            >
+              {this.state.successMsg}
+            </div>
+          )}
         </div>
         <div className="col-lg-12 text-center">
           <h1>Checkout:</h1>
@@ -94,7 +136,7 @@ export default class CheckoutView extends React.Component {
               style={{ minHeight: "30em" }}
             >
               <div className="row">
-                <div className="col-lg-6 stripe-border">
+                <div className="col-lg-12 stripe-border">
                   <p
                     onClick={() => {
                       this._toggleDetails();
@@ -109,106 +151,116 @@ export default class CheckoutView extends React.Component {
                   </p>
                   {this.state.showDetails ? (
                     <>
-                    <div className="form-group row">
-                      <div className="col-lg-6">
-                        <label for="inputEmail3">Card number</label>
-                        <div className="input-group ">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="inlineFormInputGroupUsername2"
-                            value={this.state.creditCardNumber}
-                          />
-                          <div className="input-group-addon">
-                            <div
-                              className="input-group-text"
-                              style={{
-                                height: "100%",
-                                borderTopLeftRadius: "0px",
-                                borderBottomLeftRadius: "0px",
-                              }}
-                            >
-                              <CopyToClipboard text={this.state.creditCardNumber}>
-                                <FontAwesomeIcon
-                                  icon={faClipboard}
-                                  color="black"
-                                  style={{ cursor: "pointer" }}
-                                />
-                              </CopyToClipboard>
+                      <div className="form-group row">
+                        <div className="col-lg-6">
+                          <label for="inputEmail3">Card number</label>
+                          <div className="input-group ">
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="inlineFormInputGroupUsername2"
+                              value={this.state.creditCardNumber}
+                            />
+                            <div className="input-group-addon">
+                              <div
+                                className="input-group-text"
+                                style={{
+                                  height: "100%",
+                                  borderTopLeftRadius: "0px",
+                                  borderBottomLeftRadius: "0px",
+                                }}
+                              >
+                                <CopyToClipboard
+                                  text={this.state.creditCardNumber}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faClipboard}
+                                    color="black"
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </CopyToClipboard>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-lg-3">
+                          <label for="inputEmail3">Exp Date</label>
+                          <div className="input-group ">
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="inlineFormInputGroupUsername2"
+                              value={this.state.creditCardExp}
+                            />
+                            <div className="input-group-addon">
+                              <div
+                                className="input-group-text"
+                                style={{
+                                  height: "100%",
+                                  borderTopLeftRadius: "0px",
+                                  borderBottomLeftRadius: "0px",
+                                }}
+                              >
+                                <CopyToClipboard
+                                  text={this.state.creditCardExp}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faClipboard}
+                                    color="black"
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </CopyToClipboard>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-lg-3">
+                          <label for="inputEmail3">CVC</label>
+                          <div className="input-group ">
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="inlineFormInputGroupUsername2"
+                              value={this.state.creditCardCVC}
+                            />
+                            <div className="input-group-addon">
+                              <div
+                                className="input-group-text"
+                                style={{
+                                  height: "100%",
+                                  borderTopLeftRadius: "0px",
+                                  borderBottomLeftRadius: "0px",
+                                }}
+                              >
+                                <CopyToClipboard
+                                  text={this.state.creditCardCVC}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faClipboard}
+                                    color="black"
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </CopyToClipboard>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="col-lg-3">
-                        <label for="inputEmail3">Exp Date</label>
-                        <div className="input-group ">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="inlineFormInputGroupUsername2"
-                            value={this.state.creditCardExp}
-                          />
-                          <div className="input-group-addon">
-                            <div
-                              className="input-group-text"
-                              style={{
-                                height: "100%",
-                                borderTopLeftRadius: "0px",
-                                borderBottomLeftRadius: "0px",
-                              }}
-                            >
-                              <CopyToClipboard text={this.state.creditCardExp}>
-                                <FontAwesomeIcon
-                                  icon={faClipboard}
-                                  color="black"
-                                  style={{ cursor: "pointer" }}
-                                />
-                              </CopyToClipboard>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-lg-3">
-                        <label for="inputEmail3">CVC</label>
-                        <div className="input-group ">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="inlineFormInputGroupUsername2"
-                            value={this.state.creditCardCVC}
-                          />
-                          <div className="input-group-addon">
-                            <div
-                              className="input-group-text"
-                              style={{
-                                height: "100%",
-                                borderTopLeftRadius: "0px",
-                                borderBottomLeftRadius: "0px",
-                              }}
-                            >
-                            <CopyToClipboard text={this.state.creditCardCVC}>
-                                <FontAwesomeIcon
-                                  icon={faClipboard}
-                                  color="black"
-                                  style={{ cursor: "pointer" }}
-                                />
-                              </CopyToClipboard>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr/>
+                      <hr />
                     </>
                   ) : null}
                   <label>Card Details:</label>
-                  {this.state.CLIENT_SECRET?
-                    <StripeForm CLIENT_SECRET={this.state.CLIENT_SECRET}/>
-                    :
-                    <div style={{marginTop:"30px"}}>
-                      <BarLoader size={100} width={"100%"} color="#51B8C8"/>
+                  {this.state.CLIENT_SECRET ? (
+                    <StripeForm
+                      toggleSuccessMsg={this._toggleSuccessMsg}
+                      total={this.state.total}
+                      CLIENT_SECRET={this.state.CLIENT_SECRET}
+                    />
+                  ) : (
+                    <div style={{ marginTop: "30px" }}>
+                      <BarLoader size={100} width={"100%"} color="#51B8C8" />
                     </div>
-                  }
+                  )}
                   <div className="row" style={{ marginTop: "30px" }}>
                     <div className="col-lg-12">
                       <p style={{ color: "#6c757d" }}>3D Security by:</p>

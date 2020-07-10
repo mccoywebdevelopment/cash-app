@@ -22,6 +22,12 @@ class App extends React.Component {
     cartNumber:0,
     isCheckout:false
   }
+  _resetSubscribedItems = () =>{
+    let newState = this.state;
+    newState.subscribedItems = [];
+    this.setState(newState);
+    this._updateCartNumber();
+  }
   _updateUser = (user) =>{
     let newState = this.state;
     newState.user = user;
@@ -155,7 +161,7 @@ class App extends React.Component {
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
           :this.state.selected=='checkout'?
-            <CheckoutView nav={this._toggleLink} user={this.state.user} items={this.state.subscribedItems}/>
+            <CheckoutView nav={this._toggleLink} reset={this._resetSubscribedItems} user={this.state.user} items={this.state.subscribedItems}/>
           :this.state.selected=='cart'?
             <CartView items={this.state.subscribedItems} delete={this._deleteItemFromCart} add={this._addItemToCart} 
               remove={this._removeItemFromCart} nav={this._toggleLink} toggleCheckout={this._toggleCheckout}/>

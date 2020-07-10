@@ -18,9 +18,6 @@ const StripeForm = (props) => {
     const result = await stripe.confirmCardPayment(props.CLIENT_SECRET, {
       payment_method: {
         card: elements.getElement(CardElement),
-        billing_details: {
-          name: 'Jenny Rosen',
-        },
       }
     });
 
@@ -35,7 +32,7 @@ const StripeForm = (props) => {
         // execution. Set up a webhook or plugin to listen for the
         // payment_intent.succeeded event that handles any business critical
         // post-payment actions.
-        alert("success")
+        props.toggleSuccessMsg();
       }
     }
   };
@@ -65,7 +62,8 @@ const StripeForm = (props) => {
   return (
       <form onSubmit={handleSubmit}>
         <CardElement options={CARD_ELEMENT_OPTIONS}/>
-          <button className="btn btn-primary" style={{width:"100%",marginTop:"10%"}} type="submit" disabled={!stripe}>
+          <h1 style={{marginTop:'30px'}}>Total: ${props.total.toFixed(2)}</h1>
+          <button className="btn btn-primary" style={{width:'30%',marginTop:'30px'}} type="submit" disabled={!stripe}>
               Pay
           </button>
       </form>
