@@ -1,9 +1,12 @@
 import React from "react";
 import { API_BASE_URL } from "../config/variables";
 import secureImage from "./images/secure.svg";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import LoginView from "./LoginView";
 import RegisterView from "./RegisterView";
+import Table from "../components/Table";
 
 export default class ProfileView extends React.Component {
   state = {
@@ -14,10 +17,10 @@ export default class ProfileView extends React.Component {
   };
   constructor(props) {
     super(props);
+    console.log(this.props);
   }
   _fetchLogout = async () => {
     const bearer = "Bearer " + localStorage.getItem("jwt");
-    console.log(this.props.user);
     await fetch(API_BASE_URL + "/customer/logout", {
       method: "POST",
       body: JSON.stringify({
@@ -71,16 +74,15 @@ export default class ProfileView extends React.Component {
       <div className="col-lg-12 card p-card" style={{ minHeight: "30em" }}>
         <div className="row">
           <div className="col-lg-6 h-100">
-            <img src={secureImage} style={{width:"100%"}}/>
+            <img src={secureImage} style={{ width: "100%" }} />
           </div>
           <div className="col-lg-6 h-100 text-center">
             <div className="col-lg-12">
-              <h4 style={{marginBottom:"150px"}}>Please select one of the following:</h4>
+              <h4 style={{ marginBottom: "150px" }}>
+                Please select one of the following:
+              </h4>
             </div>
-            <div
-              className="col-lg-12 d-inline"
-              style={{ marginTop: "30%" }}
-            >
+            <div className="col-lg-12 d-inline" style={{ marginTop: "30%" }}>
               <button
                 onClick={this._selectLogin}
                 className="btn btn-primary btn-lg"
@@ -138,59 +140,130 @@ export default class ProfileView extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-4" style={{ flex: "1" }}>
+          <div className="col-md-4">
             <div className="card p-card" style={{ minHeight: "100%" }}>
+              <div className="row">
+                <div className="col-lg-8">
+                  <h6 style={{ fontWeight: "bold" }}>My Profile:</h6>
+                </div>
+                <div className="col-lg-4">
+                  <FontAwesomeIcon
+                    className="dropdown-toggle"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    icon={faEllipsisV}
+                    style={{
+                      float: "right",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <div
+                    class="dropdown-menu"
+                    style={{ minWidth: "6rem" }}
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <p
+                      onClick={this._fetchLogout}
+                      class="dropdown-item"
+                      style={{
+                        color: "black",
+                        marginBottom: 0,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Logout
+                    </p>
+                    <div class="dropdown-divider"></div>
+                    <p
+                      class="dropdown-item"
+                      style={{
+                        color: "#E25950",
+                        marginBottom: 0,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete Account
+                    </p>
+                  </div>
+                </div>
+              </div>
               <div className="col-lg-12 text-center">
                 <img
                   src="https://images.unsplash.com/photo-1537815749002-de6a533c64db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
                   className="img-fluid"
-                  style={{ width: "150px", borderRadius: "50%" }}
+                  style={{
+                    width: "150px",
+                    borderRadius: "50%",
+                    marginTop: "30px",
+                  }}
                 />
               </div>
+              <div className="row" style={{ marginTop: "2em", flex: "1" }}>
+                <div className="col-lg-12 text-center">
+                <h7 style={{ fontWeight: "bold" }}>{this.props.user.name}</h7>
+                </div>
+                <div className="col-lg-12 text-center">
+                <h7 style={{ color: "#9b9b9b" }}>{this.props.user.username}</h7>
+                </div>
+                <div className="col-lg-12 text-center">
+                  <h7 style={{ color: "#9b9b9b" }}>Joined: {formattedDate}</h7>
+                </div>
 
-              <div className="col-lg-12" style={{ marginTop: "30px" }}>
-                <h5 style={{ fontWeight: "bold" }}>My Profile:</h5>
-              </div>
-              <div className="row" style={{ marginTop: "2em" }}>
-                <div className="col-lg-6">
-                  <h5 style={{ fontWeight: "500" }}>Name:</h5>
+                <div
+                  style={{ marginTop: "30px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ color: "#9b9b9b" }}>Spent:</h7>
                 </div>
-                <div className="col-lg-6">
-                  <p style={{ float: "right", textAlign: "end" }}>
-                    {this.props.user.name}
-                  </p>
+                <div
+                  style={{ marginTop: "30px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ color: "#9b9b9b" }}>Items:</h7>
                 </div>
-                <div className="col-lg-7" style={{ marginTop: "15px" }}>
-                  <h5 style={{ fontWeight: "500" }}>Date Created:</h5>
+                <div
+                  style={{ marginTop: "30px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ color: "#9b9b9b" }}>Orders:</h7>
                 </div>
-                <div className="col-lg-5" style={{ marginTop: "15px" }}>
-                  <p style={{ float: "right" }}>{formattedDate}</p>
+
+                <div
+                  style={{ marginTop: "10px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ fontWeight: "bold" }}>$55.67</h7>
                 </div>
-              </div>
-              <div className="row" style={{ flex: "1" }}>
-                <div className="col-lg-12">
-                  <button
-                    onClick={this._fetchLogout}
-                    className="btn btn-primary"
-                    style={{ position: "absolute", bottom: "0" }}
-                  >
-                    Logout
-                  </button>
+                <div
+                  style={{ marginTop: "10px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ fontWeight: "bold" }}>8</h7>
+                </div>
+                <div
+                  style={{ marginTop: "10px" }}
+                  className="col-lg-4 text-center"
+                >
+                  <h7 style={{ fontWeight: "bold" }}>2</h7>
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-md-8 stackem">
-            <div className="card p-card" style={{ marginBottom: "2em" }}>
+          <div className="col-lg-8">
+            <div className="card p-card" style={{ minHeight: "100%" }}>
               <div className="col-lg-12">
-                <h5 style={{ fontWeight: "bold" }}>My Orders:</h5>
+                <h6 style={{ fontWeight: "bold", marginBottom:'1rem'}}>My Orders:</h6>
+              </div>
+              <div className="col-lg-12">
+                <Table/>
               </div>
             </div>
-            <div className="card p-card">
-              <div className="col-lg-12">
-                <h5 style={{ fontWeight: "bold" }}>Billing Info:</h5>
-              </div>
-            </div>
+            {/* <div className="card p-card">
+<div className="col-lg-12">
+<h5 style={{ fontWeight: "bold" }}>Billing Info:</h5>
+</div>
+</div> */}
           </div>
         </div>
       </div>

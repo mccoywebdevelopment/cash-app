@@ -63,7 +63,14 @@ router.route('/update-order')
                 if(err){
                     return res.status(400).json({errorMsg:err});
                 }else{
-                    return res.status(400).json({result:"Success!"});
+                    userSaved.signJWT((err,jwt)=>{
+                        if(err){
+                            return res.status(400).json({errorMsg:err});
+                        }else{
+                            console.log(true);
+                            return res.status(200).json({jwt:jwt});
+                        }
+                    });
                 }
             });
         }

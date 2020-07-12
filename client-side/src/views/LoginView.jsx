@@ -37,7 +37,6 @@ export default class LoginView extends React.Component {
     } else {
       newState.isValidPassword = true;
     }
-    console.log(newState);
     this.setState(newState);
 
     if (this.state.isValidEmail && this.state.isValidPassword) {

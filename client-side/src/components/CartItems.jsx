@@ -10,7 +10,7 @@ export default class CartItems extends React.Component{
         const list = ()=>{
             return this.props.items.map((item,index)=>{
                 return(
-                    <div className="card" style={{padding:"8px",marginBottom:"30px"}}>
+                    <div className="card" style={{padding:"20px",marginBottom:"30px"}}>
                         <div className="row">
                             <div className="col-lg-4">
                                 <img className="img-fluid" src={item.imageURL}/>
@@ -26,9 +26,9 @@ export default class CartItems extends React.Component{
                                     <div className="col-lg-6">
                                         <h5 style={{position:"absolute",bottom:0}}>Price: ${item.price}</h5>
                                     </div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-5 offset-lg-1">
                                         <p>Quantity:</p>
-                                        <div style={{position:"absolute",bottom:0,float:"right"}}>
+                                        <div style={{position:'absolute',bottom:0}}>
                                             {item.quantity==1 || !item.quantity?
                                                 <span className="input-number-decrement my-disable">–</span>
                                             :

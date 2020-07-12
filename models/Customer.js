@@ -3,6 +3,8 @@ const SALT_WORK_FACTOR = 12;
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/secret");
+const CartModel = require('./Cart');
+const ItemModel = require('./Item');
 
 var CustomerSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -43,7 +45,6 @@ CustomerSchema.pre("save", function (next) {
           } else {
             // override the cleartext password with the hashed one
             user.password = hash;
-            console.log("Done");
             next();
           }
         });
@@ -65,20 +66,85 @@ CustomerSchema.methods.comparePassword = function (candidatePassword, cb) {
 };
 
 CustomerSchema.methods.signJWT = function (done) {
-  const payload = {
-    id: this._id,
-    username: this.username,
-    name: this.name,
-    dateCreated: this.dateCreated,
-    orders: this.orders,
-  };
-  jwt.sign(payload, keys.JWTKey, { expiresIn: 172800 }, (err, token) => {
-    if (err) {
+  populateOrders(this.orders,(err,result)=>{
+    if(err){
       done(err);
-    } else {
-      done(null, token);
+    }else{
+      console.log("result");
+      console.log(result);
+      console.log("-----------------")
+      const payload = {
+        id: this._id,
+        username: this.username,
+        name: this.name,
+        dateCreated: this.dateCreated,
+        orders: result
+      };
+      jwt.sign(payload, keys.JWTKey, { expiresIn: 172800 }, (err, token) => {
+        if (err) {
+          done(err);
+        } else {
+          done(null, token);
+        }
+      });
     }
   });
 };
+
+
+function populateOrders(orders,callback){
+  if(orders.length==0){
+    callback(null,[]);
+  }else{
+    var count = 0;
+    var errors = [];
+    var arrOrders = [];
+    
+    orders.forEach(orderID =>{
+      CartModel.findById(orderID,(err,orderFound)=>{
+        if(err){
+          errors.push(err);
+        }else{
+          populateItems(orderFound.items,(err,items)=>{
+            if(err){
+              errors.push(err);
+            }else{
+              console.log(orderFound.items);
+              orderFound.items = items;
+              arrOrders.push(orderFound);
+            }
+            count++;
+            if(count == orders.length){
+              callback(null,arrOrders);
+            }
+          });
+        }
+      });
+    });
+  }
+}
+function populateItems(items,callback){
+  if(items.length==0){
+    callback(null,[]);
+  }else{
+    var count = 0;
+    var errors = [];
+    var arrItems = [];
+    items.forEach(element => {
+      ItemModel.findById(element,(err,item)=>{
+        if(err){
+          errors.push(err);
+        }else{
+          arrItems.push(item);
+        }
+        count++;
+        if(count == items.length){
+          callback(null,arrItems);
+        }
+
+      });
+    });
+  }
+}
 
 module.exports = mongoose.model("Customer", CustomerSchema);

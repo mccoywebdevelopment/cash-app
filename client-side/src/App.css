@@ -136,6 +136,48 @@ body{
 .css-1mor95g{
     width:100%
 }
+.copy-input{
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+.InputElement{
+    border: 1px solid #ced4da;
+}
+th{
+    color:#9b9b9b;
+    font-size: 1rem;
+    font-weight: 500;
+}
+tr{
+    margin-top: 20px;
+}
+td{
+    /* white-space:pre-wrap; 
+    word-wrap:break-word; */
+    /* max-width: 50px; */
+    font-weight: 500;
+    font-size:1rem;
+
+}
+tr>th{
+    padding-bottom: 1rem;
+    font-weight: bold;
+    color: black;
+}
+tr>td {
+    padding-bottom: 2em;
+    padding-top:0;
+    vertical-align: baseline;
+}
+tr td:nth-child(3n+3){
+    /* float:right;
+    vertical-align: baseline; */
+    text-align: end;
+}
+td>span{
+    font-weight: bold;
+}
 /* * {
     box-sizing: border-box;
   }

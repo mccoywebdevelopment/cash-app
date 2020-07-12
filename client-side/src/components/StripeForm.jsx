@@ -46,7 +46,7 @@ const StripeForm = (props) => {
         backgroundClip: "padding-box",
         border: "1px solid #ced4da",
         borderRadius: ".25rem",
-        transition: "border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+        // transition: "border-color .15s ease-in-out,box-shadow .15s ease-in-out",
 
         "::placeholder": {
           color: "#CFD7DF",
@@ -62,8 +62,8 @@ const StripeForm = (props) => {
   return (
       <form onSubmit={handleSubmit}>
         <CardElement options={CARD_ELEMENT_OPTIONS}/>
-          <h1 style={{marginTop:'30px'}}>Total: ${props.total.toFixed(2)}</h1>
-          <button className="btn btn-primary" style={{width:'30%',marginTop:'30px'}} type="submit" disabled={!stripe}>
+          <h4 style={{marginTop:'30px'}}>Total: ${props.total.toFixed(2)}</h4>
+          <button className="btn btn-primary" style={{width:'20%',marginTop:'30px'}} type="submit" disabled={!stripe}>
               Pay
           </button>
       </form>

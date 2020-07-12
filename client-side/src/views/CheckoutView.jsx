@@ -5,6 +5,7 @@ import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import BarLoader from "react-spinners/BarLoader";
+import jwt_decode from "jwt-decode";
 
 import StripeForm from "../components/StripeForm";
 
@@ -18,12 +19,18 @@ export default class CheckoutView extends React.Component {
     total: null,
     errMsg: "",
     successMsg: "",
+    copiedText:""
   };
   constructor(props) {
     super(props);
     if (!this.props.user) {
       this.props.nav("profile");
     }
+  }
+  _toggleCopiedText = (text) =>{
+    let newState = this.state;
+    newState.copiedText = text;
+    this.setState(newState);
   }
   _toggleSuccessMsg = () => {
     let newState = this.state;
@@ -38,7 +45,7 @@ export default class CheckoutView extends React.Component {
   componentDidMount = () => {
     this._fetchClientSecrete();
   };
-  _fetchUpdateOrder = async() =>{
+  _fetchUpdateOrder = async () => {
     const bearer = "Bearer " + localStorage.getItem("jwt");
     await fetch(API_BASE_URL + "/payment/update-order", {
       method: "POST",
@@ -53,9 +60,15 @@ export default class CheckoutView extends React.Component {
       .then((responseData) => {
         if (responseData.errorMsg) {
           this._updateErrMsg(responseData.errorMsg);
+        }else{
+          var jwt = responseData.jwt;
+          var user = jwt_decode(jwt);
+
+          localStorage.setItem("jwt",jwt);
+          this.props.updateUser(user);
         }
       });
-  }
+  };
   _toggleDetails = () => {
     let newState = this.state;
     newState.showDetails = !newState.showDetails;
@@ -133,7 +146,7 @@ export default class CheckoutView extends React.Component {
           <div className="row">
             <div
               className="col-lg-12 card p-card"
-              style={{ minHeight: "30em" }}
+              style={{ minHeight: "30em", marginBottom: "100px" }}
             >
               <div className="row">
                 <div className="col-lg-12 stripe-border">
@@ -145,6 +158,8 @@ export default class CheckoutView extends React.Component {
                       textDecoration: "underline",
                       cursor: "pointer",
                       color: "#51B8C8",
+                      width:'fit-content',
+                      fontSize:"20px"
                     }}
                   >
                     {text}
@@ -157,30 +172,31 @@ export default class CheckoutView extends React.Component {
                           <div className="input-group ">
                             <input
                               type="text"
-                              className="form-control"
+                              className={"form-control "+(this.state.creditCardNumber == this.state.copiedText?'copy-input':'')}
                               id="inlineFormInputGroupUsername2"
                               value={this.state.creditCardNumber}
                             />
-                            <div className="input-group-addon">
-                              <div
-                                className="input-group-text"
-                                style={{
-                                  height: "100%",
-                                  borderTopLeftRadius: "0px",
-                                  borderBottomLeftRadius: "0px",
-                                }}
-                              >
-                                <CopyToClipboard
-                                  text={this.state.creditCardNumber}
-                                >
+                            <CopyToClipboard text={this.state.creditCardNumber}>
+                              <div onClick={()=>{this._toggleCopiedText(this.state.creditCardNumber)}} className="input-group-addon">
+                                <div
+                                  className={"input-group-text "+(this.state.creditCardNumber == this.state.copiedText?'copy-input':'')}
+                                  style={{
+                                    height: "100%",
+                                    borderTopLeftRadius: "0px",
+                                    borderBottomLeftRadius: "0px",
+                                    cursor: "pointer",
+                                  }}>
+                                  {this.state.creditCardNumber == this.state.copiedText?
+                                  <>Copied!</>
+                                  :
                                   <FontAwesomeIcon
                                     icon={faClipboard}
                                     color="black"
-                                    style={{ cursor: "pointer" }}
                                   />
-                                </CopyToClipboard>
+                                  }
+                                </div>
                               </div>
-                            </div>
+                            </CopyToClipboard>
                           </div>
                         </div>
                         <div className="col-lg-3">
@@ -188,30 +204,32 @@ export default class CheckoutView extends React.Component {
                           <div className="input-group ">
                             <input
                               type="text"
-                              className="form-control"
+                              className={"form-control "+(this.state.creditCardExp == this.state.copiedText?'copy-input':'')}
                               id="inlineFormInputGroupUsername2"
                               value={this.state.creditCardExp}
                             />
-                            <div className="input-group-addon">
-                              <div
-                                className="input-group-text"
-                                style={{
-                                  height: "100%",
-                                  borderTopLeftRadius: "0px",
-                                  borderBottomLeftRadius: "0px",
-                                }}
-                              >
-                                <CopyToClipboard
-                                  text={this.state.creditCardExp}
+                            <CopyToClipboard text={this.state.creditCardExp}>
+                              <div onClick={()=>{this._toggleCopiedText(this.state.creditCardExp)}} className="input-group-addon">
+                                <div
+                                  className={"input-group-text "+(this.state.creditCardExp == this.state.copiedText?'copy-input':'')}
+                                  style={{
+                                    height: "100%",
+                                    borderTopLeftRadius: "0px",
+                                    borderBottomLeftRadius: "0px",
+                                    cursor: "pointer",
+                                  }}
                                 >
+                                {this.state.creditCardExp == this.state.copiedText?
+                                  <>Copied!</>
+                                  :
                                   <FontAwesomeIcon
                                     icon={faClipboard}
                                     color="black"
-                                    style={{ cursor: "pointer" }}
                                   />
-                                </CopyToClipboard>
+                                  }
+                                </div>
                               </div>
-                            </div>
+                            </CopyToClipboard>
                           </div>
                         </div>
                         <div className="col-lg-3">
@@ -219,30 +237,32 @@ export default class CheckoutView extends React.Component {
                           <div className="input-group ">
                             <input
                               type="text"
-                              className="form-control"
+                              className={"form-control "+(this.state.creditCardCVC == this.state.copiedText?'copy-input':'')}
                               id="inlineFormInputGroupUsername2"
                               value={this.state.creditCardCVC}
                             />
-                            <div className="input-group-addon">
-                              <div
-                                className="input-group-text"
-                                style={{
-                                  height: "100%",
-                                  borderTopLeftRadius: "0px",
-                                  borderBottomLeftRadius: "0px",
-                                }}
-                              >
-                                <CopyToClipboard
-                                  text={this.state.creditCardCVC}
+                            <CopyToClipboard text={this.state.creditCardCVC}>
+                              <div  onClick={()=>{this._toggleCopiedText(this.state.creditCardCVC)}} className="input-group-addon">
+                                <div
+                                  className={"input-group-text "+(this.state.creditCardCVC == this.state.copiedText?'copy-input':'')}
+                                  style={{
+                                    height: "100%",
+                                    borderTopLeftRadius: "0px",
+                                    borderBottomLeftRadius: "0px",
+                                    cursor: "pointer",
+                                  }}
                                 >
+                                  {this.state.creditCardCVC == this.state.copiedText?
+                                  <>Copied!</>
+                                  :
                                   <FontAwesomeIcon
                                     icon={faClipboard}
                                     color="black"
-                                    style={{ cursor: "pointer" }}
                                   />
-                                </CopyToClipboard>
+                                  }
+                                </div>
                               </div>
-                            </div>
+                            </CopyToClipboard>
                           </div>
                         </div>
                       </div>
