@@ -24,6 +24,7 @@ var CustomerSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cart",
+
     },
   ],
 });
@@ -70,9 +71,6 @@ CustomerSchema.methods.signJWT = function (done) {
     if(err){
       done(err);
     }else{
-      console.log("result");
-      console.log(result);
-      console.log("-----------------")
       const payload = {
         id: this._id,
         username: this.username,
@@ -131,17 +129,16 @@ function populateItems(items,callback){
     var errors = [];
     var arrItems = [];
     items.forEach(element => {
-      ItemModel.findById(element,(err,item)=>{
+      ItemModel.findById(element.item,(err,item)=>{
         if(err){
           errors.push(err);
-        }else{
-          arrItems.push(item);
+        }else if(item){
+          arrItems.push({item:item,quantity:element.quantity});
         }
         count++;
         if(count == items.length){
           callback(null,arrItems);
         }
-
       });
     });
   }

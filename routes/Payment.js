@@ -80,7 +80,6 @@ router.route('/update-order')
 function returnCart(items,callback){
     var price = 0;
     var errors = [];
-    var order = {};
     var newItems = [];
     var count = 0;
     if(items.length<1){
@@ -100,8 +99,10 @@ function returnCart(items,callback){
                     }else{
                         price = price + itemFound.price;
                     }
-                    itemFound.quantity = quantity;
-                    newItems.push(itemFound);
+                    newItems.push({
+                        quantity:quantity,
+                        item:itemFound
+                    });
                 }
     
                 if(count==items.length-1 && errors.length<1){

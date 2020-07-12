@@ -128,7 +128,25 @@ export default class ProfileView extends React.Component {
       />
     );
   };
+  _calculateInfo = () =>{
+    var total = 0;
+    var itemsLen = 0;
+    var orderLength = this.props.user.orders.length;
+    for(var i=0;i<this.props.user.orders.length;++i){
+      total = total + this.props.user.orders[i].totalPrice;
+      for(var ix=0;ix<this.props.user.orders[i].items.length;++ix){
+        itemsLen = itemsLen + this.props.user.orders[i].items[ix].quantity;
+      }
+    }
+    var obj = {
+      total:total,
+      itemsLen:itemsLen,
+      orderLength:orderLength
+    }
+    return obj;
+  }
   _renderProfile = () => {
+    var infoObj = this._calculateInfo();
     var date = new Date(this.props.user.dateCreated);
     var year = date.getFullYear();
     var month = (1 + date.getMonth()).toString();
@@ -141,7 +159,7 @@ export default class ProfileView extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            <div className="card p-card" style={{ minHeight: "100%" }}>
+            <div className="card p-card" style={{maxHeight:"100%" }}>
               <div className="row">
                 <div className="col-lg-8">
                   <h6 style={{ fontWeight: "bold" }}>My Profile:</h6>
@@ -233,30 +251,30 @@ export default class ProfileView extends React.Component {
                   style={{ marginTop: "10px" }}
                   className="col-lg-4 text-center"
                 >
-                  <h7 style={{ fontWeight: "bold" }}>$55.67</h7>
+                  <h7 style={{ fontWeight: "bold" }}>${infoObj.total.toFixed(2)}</h7>
                 </div>
                 <div
                   style={{ marginTop: "10px" }}
                   className="col-lg-4 text-center"
                 >
-                  <h7 style={{ fontWeight: "bold" }}>8</h7>
+                  <h7 style={{ fontWeight: "bold" }}>{infoObj.itemsLen}</h7>
                 </div>
                 <div
                   style={{ marginTop: "10px" }}
                   className="col-lg-4 text-center"
                 >
-                  <h7 style={{ fontWeight: "bold" }}>2</h7>
+                  <h7 style={{ fontWeight: "bold" }}>{infoObj.orderLength}</h7>
                 </div>
               </div>
             </div>
           </div>
           <div className="col-lg-8">
-            <div className="card p-card" style={{ minHeight: "100%" }}>
+            <div className="card p-card" style={{ minHeight: "100%", marginBottom:"5rem" }}>
               <div className="col-lg-12">
                 <h6 style={{ fontWeight: "bold", marginBottom:'1rem'}}>My Orders:</h6>
               </div>
               <div className="col-lg-12">
-                <Table/>
+                <Table orders={this.props.user.orders}/>
               </div>
             </div>
             {/* <div className="card p-card">

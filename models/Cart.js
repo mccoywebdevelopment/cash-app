@@ -4,8 +4,11 @@ var CartSchema = new mongoose.Schema({
     dateCreated:{type: Date, required: true, default: Date.now()},
     totalPrice:{type: Number, requried: true},
     items:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Item"
+        quantity:{type:Number,required:true,default:1},
+        item:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Item"
+        }
     }]
 });
 
