@@ -1,25 +1,26 @@
 import React from "react";
+import {Spring} from 'react-spring/renderprops'
 
 import Item from "../components/Item";
 
-export default class CartView extends React.Component{
-    constructor(props){
-        super(props);
-        console.log(this.props.items);
-    }
-    render(){
-        const itemList = () =>{
-            return this.props.items.map((item,key)=>{
-                return(
+export default function CartView (props){
+    const itemList = () =>{
+        return props.items.map((item,key)=>{
+            return(
                     <div key={"item"+key} className="col-lg-4" style={{marginTop:"20px"}}>
-                        <Item data={item} addItemToCart={this.props.addItemToCart}/>
+                        <Item data={item} addItemToCart={props.addItemToCart}/>
                     </div>
-                )
-            });
-        }
-        return(
-            <>
-                <div className="container">
+            )
+        });
+    }
+    return(
+        <>
+            <Spring
+                from={{marginTop:-1500,opacity:0}}
+                to={{marginTop:0,opacity:1}}
+            >
+            {props=>(
+                <div style={props} className="container">
                     <div className="row">
                         <div className="col-lg-12">
                             <h1 className="text-center">Items:</h1>
@@ -29,7 +30,9 @@ export default class CartView extends React.Component{
                         {itemList()}
                     </div>
                 </div>
-            </>
-        );
-    }
+            )}
+            </Spring>
+        </>
+    );
+    
 }

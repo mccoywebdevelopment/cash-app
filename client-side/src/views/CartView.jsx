@@ -1,5 +1,6 @@
 import React from "react";
 import emptyImage from "./images/empty.svg";
+import FadeIn from 'react-fade-in';
 
 import CartItems from "../components/CartItems";
 import CartTotal from "../components/CartTotal";
@@ -23,10 +24,14 @@ export default class CartView extends React.Component{
         return(
             <>
                 <div className="col-lg-8">
+                    <FadeIn>
                     <CartItems delete={this.props.delete} add={this.props.add} remove={this.props.remove} items={this.props.items}/>
+                    </FadeIn>
                 </div>
                 <div className="col-lg-4">
+                    <FadeIn>
                     <CartTotal nav={this.props.nav} total={this._getTotal()} toggleCheckout={this.props.toggleCheckout}/>
+                    </FadeIn>
                 </div>
             </>
         );
@@ -41,7 +46,8 @@ export default class CartView extends React.Component{
                     <div className="row">
                         {this.props.items.length>0?
                             this._renderItems()
-                        :   
+                        : 
+                        <FadeIn>
                         <div className="col-lg-12 card p-card" style={{ minHeight: "30em" }}>
                             <div className="row">
                                 <div className="col-lg-6 h-100">
@@ -55,6 +61,7 @@ export default class CartView extends React.Component{
                                 </div>
                             </div>
                         </div>
+                        </FadeIn>
                         }
                     </div>
                 </div>

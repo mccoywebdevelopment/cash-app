@@ -195,3 +195,7 @@ td>span{
   iframe{
       height: auto;
   } */
+  .fade-in {
+	opacity:0;
+  transition:opacity 1s linear;
+}

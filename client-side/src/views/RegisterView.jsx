@@ -1,6 +1,7 @@
 import React from "react";
 import { API_BASE_URL } from "../config/variables";
 import jwt_decode from "jwt-decode";
+import FadeIn from 'react-fade-in';
 
 export default class RegisterView extends React.Component {
   state = {
@@ -83,6 +84,7 @@ export default class RegisterView extends React.Component {
   };
   render() {
     return (
+      <FadeIn>
       <div className="col-lg-12 card p-card" style={{ minHeight: "30em" }}>
         <div className="row">
           <div className="col-lg-12 text-center">
@@ -170,6 +172,7 @@ export default class RegisterView extends React.Component {
             </div>
         </div>
       </div>
+      </FadeIn>
     );
   }
 }

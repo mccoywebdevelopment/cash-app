@@ -3,6 +3,7 @@ import { API_BASE_URL } from "../config/variables";
 import secureImage from "./images/secure.svg";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FadeIn from 'react-fade-in';
 
 import LoginView from "./LoginView";
 import RegisterView from "./RegisterView";
@@ -71,6 +72,7 @@ export default class ProfileView extends React.Component {
   };
   _renderOptions = () => {
     return (
+      <FadeIn>
       <div className="col-lg-12 card p-card" style={{ minHeight: "30em" }}>
         <div className="row">
           <div className="col-lg-6 h-100">
@@ -108,6 +110,7 @@ export default class ProfileView extends React.Component {
           </div>
         </div>
       </div>
+      </FadeIn>
     );
   };
   _renderLogin = () => {
@@ -156,6 +159,7 @@ export default class ProfileView extends React.Component {
 
     var formattedDate = month + "/" + day + "/" + year;
     return (
+      <FadeIn>
       <div className="container">
         <div className="row">
           <div className="col-md-4">
@@ -269,7 +273,7 @@ export default class ProfileView extends React.Component {
             </div>
           </div>
           <div className="col-lg-8">
-            <div className="card p-card" style={{ minHeight: "100%", marginBottom:"5rem" }}>
+            <div className="card p-card" style={{marginBottom:"5rem" }}>
               <div className="col-lg-12">
                 <h6 style={{ fontWeight: "bold", marginBottom:'1rem'}}>My Orders:</h6>
               </div>
@@ -285,6 +289,7 @@ export default class ProfileView extends React.Component {
           </div>
         </div>
       </div>
+      </FadeIn>
     );
   };
   render() {
@@ -302,7 +307,8 @@ export default class ProfileView extends React.Component {
           </div>
         </div>
         {this.props.user
-          ? this._renderProfile()
+          ? 
+            this._renderProfile()
           : !this.props.user && this.state.isLogin
           ? this._renderLogin()
           : !this.props.user && this.state.isRegister

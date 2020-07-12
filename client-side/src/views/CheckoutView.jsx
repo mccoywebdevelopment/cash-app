@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import BarLoader from "react-spinners/BarLoader";
 import jwt_decode from "jwt-decode";
+import FadeIn from 'react-fade-in';
 
 import StripeForm from "../components/StripeForm";
 
