@@ -18,7 +18,6 @@ export default class ProfileView extends React.Component {
   };
   constructor(props) {
     super(props);
-    console.log(this.props);
   }
   _fetchLogout = async () => {
     const bearer = "Bearer " + localStorage.getItem("jwt");
@@ -44,6 +43,30 @@ export default class ProfileView extends React.Component {
         }
       });
   };
+  // _fetchDeleteAccount = async() =>{
+  //   const bearer = "Bearer " + localStorage.getItem("jwt");
+  //   await fetch(API_BASE_URL + "/customer/delete-account", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       userID: this.props.user.id,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: bearer,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((responseData) => {
+  //       if (responseData.errorMsg) {
+  //         this._updateErrMsg(responseData.errorMsg);
+  //       } else {
+  //         localStorage.setItem("jwt", null);
+  //         this.props.updateUser(null);
+  //       }
+  //     });
+  // }
   _selectRegister = () => {
     let newState = this.state;
     newState.isRegister = true;
@@ -196,8 +219,9 @@ export default class ProfileView extends React.Component {
                     >
                       Logout
                     </p>
-                    <div class="dropdown-divider"></div>
+                    {/* <div class="dropdown-divider"></div>
                     <p
+                      onClick={this._fetchDeleteAccount}
                       class="dropdown-item"
                       style={{
                         color: "#E25950",
@@ -206,7 +230,7 @@ export default class ProfileView extends React.Component {
                       }}
                     >
                       Delete Account
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>

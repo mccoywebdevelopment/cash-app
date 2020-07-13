@@ -8,16 +8,12 @@ export default class Table extends React.Component{
         const list = () =>{
          return this.props.orders.map((order,index)=>{
             var date = new Date(order.dateCreated);
-            var year = date.getFullYear();
-            var month = (1 + date.getMonth()).toString();
-            month = month.length > 1 ? month : "0" + month;
-            var day = date.getDate().toString();
-            day = day.length > 1 ? day : "0" + day;
-        
-            var formattedDate = month + "/" + day + "/" + year;
+
+            var formattedTime = date.toLocaleString();
+            
             return(
               <tr>
-                <td>{formattedDate}</td>
+                <td>{formattedTime}</td>
                 <td>{innerList1(order.items)}</td>
                 <td>{innerList2(order.items)}</td>
               </tr>

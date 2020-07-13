@@ -89,6 +89,32 @@ CustomerSchema.methods.signJWT = function (done) {
   });
 };
 
+//biggest to smallest
+function sortOrders(orders){
+  console.log(orders);
+  console.log("======================================================");
+  if(orders.length>0){
+    var isSorted = true;
+    for(var i=1;i<orders.length;++i){
+      var lastElement = orders[i-1]
+      var currElement = orders[i];
+      if(currElement.dateCreated>lastElement.dateCreated){
+        isSorted = false;
+        orders[i] = lastElement;
+        orders[i-1] = currElement;
+      }
+    }
+
+    if(!isSorted){
+      return sortOrders(orders);
+    }else{
+      return orders;
+    }
+  }else{
+    return [];
+  }
+}
+
 
 function populateOrders(orders,callback){
   if(orders.length==0){
@@ -107,12 +133,13 @@ function populateOrders(orders,callback){
             if(err){
               errors.push(err);
             }else{
-              console.log(orderFound.items);
               orderFound.items = items;
               arrOrders.push(orderFound);
             }
             count++;
             if(count == orders.length){
+              arrOrders = sortOrders(arrOrders);
+              console.log(arrOrders);
               callback(null,arrOrders);
             }
           });

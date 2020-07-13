@@ -14,7 +14,7 @@ import CheckoutView from "./views/CheckoutView";
 class App extends React.Component {
   
   state = {
-    selected:"profile",
+    selected:"shop",
     user:null,
     items:[],
     subscribedItems:[],
@@ -97,7 +97,6 @@ class App extends React.Component {
     }
     this.setState(newState);
     this._updateCartNumber();
-    console.log(this.state);
   }
   _toggleCheckout = () =>{
     let newState = this.state;
@@ -160,7 +159,7 @@ class App extends React.Component {
           </div>
           :this.state.selected=='shop'?
             <ShopView items={this.state.items} addItemToCart={this._addItemToCart}/>
-          :this.state.selected=='checkout'?
+          :this.state.selected=='checkout' && this.state.subscribedItems.length>0?
             <CheckoutView updateUser={this._updateUser} nav={this._toggleLink} reset={this._resetSubscribedItems} user={this.state.user} items={this.state.subscribedItems}/>
           :this.state.selected=='cart'?
             <CartView items={this.state.subscribedItems} delete={this._deleteItemFromCart} add={this._addItemToCart} 

@@ -26,7 +26,6 @@ router.route("/send-intent")
                     userFound.cart = newCart;
                     userFound.save((err,savedDoc)=>{
                         if(err){
-                            console.log("3");
                             return res.status(400).json({errorMsg:err});
                         }else{
                             var cents = savedDoc.cart.totalPrice * 100;
@@ -67,7 +66,6 @@ router.route('/update-order')
                         if(err){
                             return res.status(400).json({errorMsg:err});
                         }else{
-                            console.log(true);
                             return res.status(200).json({jwt:jwt});
                         }
                     });

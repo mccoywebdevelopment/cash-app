@@ -5,6 +5,7 @@ const passport = require('passport');
 const {JWTKey} = require('../config/secret');
 const jwt = require("jsonwebtoken");
 const CustomerModel = require('../models/Customer');
+// const DeleteCustomerModel = require('../models/DeletedCustomer');
 
 router.route('/register')
 .post((req,res)=>{
@@ -109,5 +110,29 @@ router.route('/find/all')
         }
     });
 });
+
+// router.route('/delete-account')
+// .post(passport.authenticate('jwt', { session: false }),(req,res)=>{
+//     const jwtToken = req.headers.authorization.split(' ')[1];
+//     const user = jwt.verify(jwtToken, JWTKey);
+//     CustomerModel.findOneAndDelete({_id:user.id},(err,user)=>{
+//         if(err){
+//             return res.status(400).json({errorMsg:err});
+//         }else if(!user){
+//             return res.status(400).json({errorMsg:"User not found."});
+//         }else{
+//             console.log(user);
+//             var deleted = new DeleteCustomerModel(user);
+//             deleted.save((err,result)=>{
+//                 if(err){
+//                     return res.status(400).json({errorMsg:err});
+//                 }else{
+//                     return res.status(200).json({result:"Deleted"});
+//                 }
+//             });
+//         }
+//     });
+    
+// });
 
 module.exports = router;

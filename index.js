@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app = express();
-const db = require("./config/secret").mongoURI;
+const db = require("./config/secret").mongoTestingURI;
 const port = process.env.PORT || 4000;
 const passport = require("passport");
 const cors = require('cors');
@@ -20,6 +20,9 @@ mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
 app.use(passport.initialize());
 require("./config/passport")(passport);
 app.use(cors());
+
+//create items
+require('./config/loadItems');
 
 app.use('/customer',require('./routes/Customer'));
 app.use('/item',require('./routes/Item'));
