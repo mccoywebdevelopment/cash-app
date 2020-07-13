@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app = express();
-const db = require("./config/secret").mongoTestingURI;
+const db = process.env.MONGO_URI || require("./config/secret").mongoTestingURI;
 const port = process.env.PORT || 4000;
 const passport = require("passport");
 const cors = require('cors');
@@ -12,6 +12,19 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+if(process.env.NODE_ENV ==='production'){
+  const root = require('path').join(__dirname, 'client-side', 'build')
+  app.use(express.static(root));
+  app.get("*", (req, res) => {
+      res.sendFile('index.html', { root });
+  });
+  app.get("/*", (req, res) => {
+      res.sendFile('index.html', { root });
+  });
+}else{
+  app.use(cors());
+}
+
 mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
@@ -19,7 +32,6 @@ mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
 // Passport middleware
 app.use(passport.initialize());
 require("./config/passport")(passport);
-app.use(cors());
 
 //create items
 require('./config/loadItems');
