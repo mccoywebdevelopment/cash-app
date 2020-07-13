@@ -6,7 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
 } from '@stripe/react-stripe-js';
-import {STRIPE_API_KEY}  from "./config/secret";
+const STRIPE_API_KEY = process.env.STRIPE_API_KEY || require('./config/secret').STRIPE_API_KEY
 const stripePromise = loadStripe(STRIPE_API_KEY);
 
 ReactDOM.render(

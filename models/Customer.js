@@ -91,8 +91,6 @@ CustomerSchema.methods.signJWT = function (done) {
 
 //biggest to smallest
 function sortOrders(orders){
-  console.log(orders);
-  console.log("======================================================");
   if(orders.length>0){
     var isSorted = true;
     for(var i=1;i<orders.length;++i){
@@ -139,7 +137,6 @@ function populateOrders(orders,callback){
             count++;
             if(count == orders.length){
               arrOrders = sortOrders(arrOrders);
-              console.log(arrOrders);
               callback(null,arrOrders);
             }
           });

@@ -12,6 +12,14 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch(err => console.log(err));
+
+// Passport middleware
+app.use(passport.initialize());
+require("./config/passport")(passport);
+
 if(process.env.NODE_ENV ==='production'){
   const root = require('path').join(__dirname, 'client-side', 'build')
   app.use(express.static(root));
@@ -24,14 +32,6 @@ if(process.env.NODE_ENV ==='production'){
 }else{
   app.use(cors());
 }
-
-mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB successfully connected"))
-  .catch(err => console.log(err));
-
-// Passport middleware
-app.use(passport.initialize());
-require("./config/passport")(passport);
 
 //create items
 require('./config/loadItems');
