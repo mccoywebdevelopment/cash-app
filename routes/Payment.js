@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const JWTKey = process.env.JWTKey || require('../config/secret');
+const JWTKey = process.env.JWTKey || require('../config/secret').JWTKey;
 const jwt = require("jsonwebtoken");
 const ItemModel = require('../models/Item');
 const CustomerModel = require('../models/Customer');
@@ -102,7 +102,7 @@ function returnCart(items,callback){
                         item:itemFound
                     });
                 }
-    
+
                 if(count==items.length-1 && errors.length<1){
                     var cart = new CartModel({
                         items: newItems,

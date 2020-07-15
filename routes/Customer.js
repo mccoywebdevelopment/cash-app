@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const validate = require('../config/validation');
 const passport = require('passport');
-const JWTKey = process.env.JWTKey || require('../config/secret');
+const JWTKey = process.env.JWTKey || require('../config/secret').JWTKey;
 const jwt = require("jsonwebtoken");
 const CustomerModel = require('../models/Customer');
 // const DeleteCustomerModel = require('../models/DeletedCustomer');
@@ -49,16 +49,22 @@ router.route('/login')
 
     CustomerModel.findOne({username:email}).select('+password').exec((err,doc)=>{
         if(err){
+          console.log(1);
+          console.log(err);
             return res.status(400).json({errorMsg:err});
         }else if(!doc){
+          console.log("None");
             return res.status(400).json({errorMsg:"User not found."});
         }else{
             doc.comparePassword(password,(err,isMatch)=>{
                 if(err){
+                  console.log(8);
+                  console.log(err);
                     return res.status(400).json({errorMsg:err});
                 }else{
                     doc.signJWT((err,jwt)=>{
                         if(err){
+                          console.log(9);
                             return res.status(400).json({errorMsg:err});
                         }else{
                             return res.status(200).json({jwt:jwt});
@@ -132,7 +138,7 @@ router.route('/find/all')
 //             });
 //         }
 //     });
-    
+
 // });
 
 module.exports = router;

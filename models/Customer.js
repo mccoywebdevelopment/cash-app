@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const SALT_WORK_FACTOR = 12;
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
-const JWTKey = process.env.JWTKey || require("../config/secret");
+const JWTKey = process.env.JWTKey || require("../config/secret").JWTKey;
 const CartModel = require('./Cart');
 const ItemModel = require('./Item');
 
