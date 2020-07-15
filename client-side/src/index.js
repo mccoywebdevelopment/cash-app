@@ -6,8 +6,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
 } from '@stripe/react-stripe-js';
-const STRIPE_API_KEY = process.env.STRIPE_API_KEY || require('./config/secret').STRIPE_API_KEY
-const stripePromise = loadStripe(STRIPE_API_KEY);
+// const STRIPE_API_KEY = process.env.STRIPE_API_KEY;
+const stripePromise = loadStripe("pk_test_ttj4Nu9PA6N5g7X552cLoPqF");
 
 ReactDOM.render(
   <React.StrictMode>

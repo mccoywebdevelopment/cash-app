@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const validate = require('../config/validation');
 const ItemModel = require('../models/Item');
 
 router.route('/create')

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {JWTKey} = require('../config/secret');
+const JWTKey = process.env.JWTKey || require('../config/secret');
 const jwt = require("jsonwebtoken");
 const ItemModel = require('../models/Item');
 const CustomerModel = require('../models/Customer');
 const CartModel = require('../models/Cart');
-const stripe = require('stripe')(require('../config/secret').stripeKey);
+const stripe = require('stripe')(process.env.STRIPE_API_KEY || require('../config/secret').stripeKey);
 
 router.route("/send-intent")
 .post((req,res)=>{

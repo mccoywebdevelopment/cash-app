@@ -33,7 +33,6 @@ if(process.env.NODE_ENV ==='production'){
   app.use(cors());
 }
 
-//create items
 require('./config/loadItems');
 
 app.use('/customer',require('./routes/Customer'));

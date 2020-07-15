@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const SALT_WORK_FACTOR = 12;
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("jsonwebtoken");
-const keys = require("../config/secret");
+const JWTKey = process.env.JWTKey || require("../config/secret");
 const CartModel = require('./Cart');
 const ItemModel = require('./Item');
 
@@ -78,7 +78,7 @@ CustomerSchema.methods.signJWT = function (done) {
         dateCreated: this.dateCreated,
         orders: result
       };
-      jwt.sign(payload, keys.JWTKey, { expiresIn: 172800 }, (err, token) => {
+      jwt.sign(payload, JWTKey, { expiresIn: 172800 }, (err, token) => {
         if (err) {
           done(err);
         } else {
@@ -121,7 +121,7 @@ function populateOrders(orders,callback){
     var count = 0;
     var errors = [];
     var arrOrders = [];
-    
+
     orders.forEach(orderID =>{
       CartModel.findById(orderID,(err,orderFound)=>{
         if(err){
